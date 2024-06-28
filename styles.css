@@ -129,8 +129,33 @@ div[data-type="bookshelf-view"] .view-content {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 20px;
+    height: auto !important;
 }
 
 .pluginModal {
     margin-top: 0;
+}
+
+.input-label {
+    margin-bottom: 10px;
+}
+.name-label {
+    flex-grow: 1;
+    margin-right: 20px;
+}
+
+.name-label> input {
+    width: 100%;
+}
+.option-label {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.info-form {
+    display: flex;
+}
+
+.desc-label {
+    flex-grow: 2;
 }

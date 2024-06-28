@@ -3,6 +3,7 @@ import MyPlugin from '../main';
 import { WordCounter } from '../UtilityFunctions';
 
 export const VIEW_TYPE_FILE_LIST = 'file-list-view';
+export const NEW_ITEM_MODAL = 'new-item-modal';
 
 // 目录视图
 export class TocView extends ItemView {
@@ -121,7 +122,7 @@ export class TocView extends ItemView {
         });
 
         const fileList = folderItem.createEl('ul', { cls: 'file-list' });
-        fileList.style.display = 'none';
+        fileList.style.display = 'block';
         folderHeader.addEventListener('click', () => {
             fileList.style.display = fileList.style.display === 'none' ? 'block' : 'none';
         });
@@ -174,7 +175,7 @@ export class TocView extends ItemView {
 
         outline.then(titles => {
             titles.forEach(title => {
-                const outlineItem = outlineList.createEl('li', { text: title });
+                outlineList.createEl('li', { text: title });
                 // outlineItem.addEventListener('click', (e) => {
                 //     e.stopPropagation();
                 //     this.app.workspace.openLinkText(file.path, '', false);
@@ -270,8 +271,7 @@ class NewChapterModal extends Modal {
     }
 }
 
-// 新建条目的模态框
-class NewItemModal extends Modal {
+export class NewItemModal extends Modal {
     folder: TFolder;
     view: TocView;
 
@@ -283,25 +283,35 @@ class NewItemModal extends Modal {
 
     onOpen() {
         const { contentEl } = this;
-        contentEl.createEl('h2', {cls: 'pluginModal', text: '新建条目' });
+        contentEl.empty();
+        contentEl.createEl('p', { text: '新建', cls: 'modal-title' });
 
-        const input = new TextComponent(contentEl);
-        input.setPlaceholder('条目名称');
+        const nameInput = new TextComponent(contentEl);
+        nameInput.setPlaceholder('输入章节名称...');
 
-        new ButtonComponent(contentEl)
-            .setButtonText('创建')
-            .setCta()
+        const createFolderButton = new ButtonComponent(contentEl);
+        createFolderButton.setButtonText('新卷')
             .onClick(async () => {
-                const itemName = input.getValue();
-                if (!itemName) {
-                    new Notice('条目名称不能为空');
-                    return;
+                const name = nameInput.getValue();
+                if (name) {
+                    await this.app.vault.createFolder(`${this.folder.path}/${name}`);
+                    new Notice(`Folder '${name}' created.`);
+                    this.view.refresh();
+                    this.close();
                 }
+            });
 
-                const folderPath = `${this.folder.path}/${itemName}`;
-                await this.app.vault.createFolder(folderPath);
-                this.close();
-                this.view.refresh();
+        const createFileButton = new ButtonComponent(contentEl);
+        createFileButton.setButtonText('新章节')
+            .onClick(async () => {
+                const name = nameInput.getValue();
+                if (name) {
+                    const filePath = `${this.folder.path}/${name}.md`;
+                    await this.app.vault.create(filePath, '');
+                    new Notice(`File '${name}.md' created.`);
+                    this.view.refresh();
+                    this.close();
+                }
             });
     }
 

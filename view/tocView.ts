@@ -271,7 +271,7 @@ class NewChapterModal extends Modal {
     }
 }
 
-export class NewItemModal extends Modal {
+class NewItemModal extends Modal {
     folder: TFolder;
     view: TocView;
 
@@ -284,10 +284,10 @@ export class NewItemModal extends Modal {
     onOpen() {
         const { contentEl } = this;
         contentEl.empty();
-        contentEl.createEl('p', { text: '新建', cls: 'modal-title' });
+        contentEl.createEl('p', { text: '新建卷/章节', cls: 'modal-title' });
 
         const nameInput = new TextComponent(contentEl);
-        nameInput.setPlaceholder('输入章节名称...');
+        nameInput.setPlaceholder('输入卷/章节名称...');
 
         const createFolderButton = new ButtonComponent(contentEl);
         createFolderButton.setButtonText('新卷')

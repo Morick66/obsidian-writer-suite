@@ -1,6 +1,5 @@
 import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, parseYaml, ButtonComponent, TextComponent, Modal, App } from 'obsidian';
 import MyPlugin from '../main';
-import {NewItemModal, TocView} from './tocView';
 import { WordCounter } from '../UtilityFunctions';
 
 export const VIEW_TYPE_BOOKSHELF = 'bookshelf-view';
@@ -9,6 +8,7 @@ export const VIEW_TYPE_BOOKSHELF = 'bookshelf-view';
 export class BookshelfView extends ItemView {
     plugin: MyPlugin;
     wordCounter: WordCounter;
+    bookListContainer: HTMLElement;
 
     constructor(leaf: WorkspaceLeaf, plugin: MyPlugin) {
         super(leaf);
@@ -28,6 +28,7 @@ export class BookshelfView extends ItemView {
     async onOpen() {
         const container = this.containerEl.children[1];
         container.empty();
+
         // 添加浮动按钮
         const floatingButton = container.createEl('button', { text: '+', cls: 'floating-button' });
         floatingButton.title = '新建书籍';
@@ -35,20 +36,20 @@ export class BookshelfView extends ItemView {
             this.showNewBookModal();
         });
 
-        this.refresh();
+        // 创建书籍列表容器
+        this.bookListContainer = container.createDiv({ cls: 'book-list-container' });
+
+        await this.refresh();
     }
 
     async refresh() {
-        const container = this.containerEl.children[1] as HTMLElement;
-        const existingContent = container.querySelectorAll('.book-item, ul, p');
-        existingContent.forEach(el => el.remove());
+        console.log('刷新视图中，，，，');
+        this.bookListContainer.empty(); // 仅清空书籍列表容器
 
         const rootFolder = "/";
         const folder = this.app.vault.getAbstractFileByPath(rootFolder);
         if (folder && folder instanceof TFolder) {
-            this.displayBooks(container, folder);
-        } else {
-            new Notice('Root folder not found or not a TFolder');
+            await this.displayBooks(this.bookListContainer, folder);
         }
     }
 
@@ -56,7 +57,7 @@ export class BookshelfView extends ItemView {
         const rootFolderPath = this.plugin.folderPath + '/小说文稿';
         const folder = this.app.vault.getAbstractFileByPath(rootFolderPath);
         if (folder && folder instanceof TFolder) {
-            const modal = new NewItemModal(this.app, folder, new TocView(this.leaf, this.plugin));
+            const modal = new NewItemModal(this.app, folder, this);
             modal.open();
         } else {
             new Notice(`文件夹未发现: ${rootFolderPath}`);
@@ -64,29 +65,31 @@ export class BookshelfView extends ItemView {
     }
 
     async displayBooks(container: HTMLElement, rootFolder: TFolder) {
-        for (const child of rootFolder.children) {
-            if (child instanceof TFolder) {
-                const infoFile = child.children.find(file => file instanceof TFile && file.name === '信息.md') as TFile;
-                if (infoFile) {
-                    const fileContents = await this.app.vault.read(infoFile);
-                    const fileYaml = parseYaml(fileContents);
-                    const novelFolder = child.children.find(file => file instanceof TFolder && file.name === '小说文稿') as TFolder;
-                    const storyFile = child.children.find(file => file instanceof TFile && file.name === '小说正文.md') as TFile;
-                    if (novelFolder) {
-                        const totalWordCount = await this.wordCounter.getTotalWordCount(novelFolder);
-                        this.displayBook(container, child, fileYaml.type, totalWordCount);
-                    } else if (storyFile) {
-                        const totalWordCount = await this.wordCounter.getWordCount(storyFile);
-                        this.displayBook(container, child, fileYaml.type, totalWordCount);
-                    } else {
-                        console.log(`小说文件夹未发现 ${child.name}`);
-                    }
+        console.log('显示书籍...');
+        const bookFolders = rootFolder.children.filter(child => child instanceof TFolder) as TFolder[];
+        
+        for (const folder of bookFolders) {
+            const infoFile = folder.children.find(file => file instanceof TFile && file.name === '信息.md') as TFile;
+            if (infoFile) {
+                const fileContents = await this.app.vault.read(infoFile);
+                const fileYaml = parseYaml(fileContents);
+                const novelFolder = folder.children.find(file => file instanceof TFolder && file.name === '小说文稿') as TFolder;
+                const storyFile = folder.children.find(file => file instanceof TFile && file.name === '小说正文.md') as TFile;
+                if (novelFolder) {
+                    const totalWordCount = await this.wordCounter.getTotalWordCount(novelFolder);
+                    this.displayBook(container, folder, fileYaml.type, totalWordCount);
+                } else if (storyFile) {
+                    const totalWordCount = await this.wordCounter.getWordCount(storyFile);
+                    this.displayBook(container, folder, fileYaml.type, totalWordCount);
+                } else {
+                    console.log(`小说文件夹未发现 ${folder.name}`);
                 }
             }
         }
     }
 
     displayBook(container: HTMLElement, folder: TFolder, type: string, totalWordCount: number) {
+        console.log(`展示图书: ${folder.name}`);
         const bookItem = container.createDiv({ cls: 'book-item' });
         bookItem.createEl('div', { cls: 'book-title', text: `${folder.name}` });
         bookItem.createEl('div', { cls: 'book-count', text: `${totalWordCount} 字` });
@@ -148,8 +151,7 @@ export class BookshelfView extends ItemView {
     }
 }
 
-
-// 新建条目的模态框
+// 新建图书
 class NewBookModal extends Modal {
     folder: TFolder;
     view: BookshelfView;
@@ -162,17 +164,17 @@ class NewBookModal extends Modal {
 
     onOpen() {
         const { contentEl } = this;
-        contentEl.createEl('h2', {cls: 'pluginModal', text: '新建书籍' });
+        contentEl.createEl('h2', { cls: 'pluginModal', text: '新建书籍' });
 
         const infoForm = contentEl.createDiv({ cls: 'info-form' });
 
-        const namelabelEl = infoForm.createEl('div', {cls: 'name-label'});
-        namelabelEl.createEl('div', {text: '书籍名称', cls: 'input-label' });
+        const namelabelEl = infoForm.createEl('div', { cls: 'name-label' });
+        namelabelEl.createEl('div', { text: '书籍名称', cls: 'input-label' });
         const nameInput = new TextComponent(namelabelEl);
         nameInput.setPlaceholder('在此输入书籍名称');
         
         // 创建书籍类型下拉选择框
-        const bookTypeLabel = namelabelEl.createEl('div', {text: "小说类型：", cls: 'option-label' });
+        const bookTypeLabel = namelabelEl.createEl('div', { text: "小说类型：", cls: 'option-label' });
         const selectEl = bookTypeLabel.createEl('select', { cls: 'book-type-select' });
         selectEl.id = 'bookType'; // 给 select 元素一个 ID
 
@@ -182,8 +184,6 @@ class NewBookModal extends Modal {
         });
         novelOption.textContent = '长篇小说';
 
-
-        
         // 创建 “短篇小说” 选项并添加到下拉选择框
         const shortStoryOption = selectEl.createEl('option', { attr: { value: 'short-story' } });
         shortStoryOption.textContent = '短篇小说';
@@ -195,14 +195,12 @@ class NewBookModal extends Modal {
             console.log('用户选择了书籍类型：', selectedValue);
         });
 
-
-        const desclabelEl = infoForm.createEl('div', {cls: 'desc-label'});
+        const desclabelEl = infoForm.createEl('div', { cls: 'desc-label' });
         desclabelEl.createEl('div', { text: '书籍简介', cls: 'input-label' });
-        const descInputEl = desclabelEl.createEl('textarea', {cls: 'book-description-textarea'});
+        const descInputEl = desclabelEl.createEl('textarea', { cls: 'book-description-textarea' });
         descInputEl.placeholder = '请输入书籍简介';
         descInputEl.rows = 10;
         descInputEl.style.width = '100%';
-
 
         // 创建确认按钮
         new ButtonComponent(contentEl)
@@ -211,49 +209,86 @@ class NewBookModal extends Modal {
             .onClick(async () => {
                 const bookName = nameInput.getValue();
                 const bookDesc = descInputEl.value;
-                let bookType = 'novel'; // 默认类型为长篇小说
-
-                // 检查单选按钮并设置类型
-                if (shortStoryOption.value === "short-story") {
-                    bookType = 'short-story';
-                }
-
-                if (!bookName) {
+                let bookType = 'novel';
+                const selectedType = document.getElementById('bookType') as HTMLSelectElement;
+                bookType = selectedType.value;
+                // 验证书籍名称是否为空
+                if (bookName.trim() === '') {
                     new Notice('书籍名称不能为空');
                     return;
                 }
 
-                // 构建信息.md的内容
-                const content = `type: ${bookType}\n书名: ${bookName}\n简介: ${bookDesc}\n`;
+                const bookFolderPath = `${this.folder.path}/${bookName}`;
+                const newFolder = await this.app.vault.createFolder(bookFolderPath);
+                if (newFolder) {
+                    await this.app.vault.create(newFolder.path + '/信息.md', `名称: ${bookName}\n类型: ${bookType}\n简介: ${bookDesc}`);
+                    if (bookType === 'novel') {
+                        const novelFolder = await this.app.vault.createFolder(newFolder.path + '/小说文稿');
+                        await this.app.vault.create(novelFolder.path + '/未命名章节.md', ''); // 创建空章节
+                    } else if (bookType === 'short-story') {
+                        await this.app.vault.create(newFolder.path + '/小说正文.md', ''); // 创建空章节
+                    }
+                }
 
-                // 使用正确的文件路径创建信息.md文件并写入内容
-                // 确保路径是正确的，这里假设 'this.folder.path' 是书籍存放的文件夹路径
-                const folderPath = `/${bookName}`;
-                const infoFilePath = `${folderPath}/信息.md`;
-
-                if (!bookName) {
-                    new Notice('书籍名称不能为空');
-                    return;
-                }
-        
-                // 尝试创建文件夹
-                try {
-                    await this.app.vault.createFolder(folderPath);
-                } catch (error) {
-                    new Notice(`创建文件夹失败: ${error}`);
-                    return;
-                }
-        
-                // 尝试创建信息.md文件并写入内容
-                try {
-                    await this.app.vault.create(infoFilePath, content);
-                } catch (error) {
-                    new Notice(`创建文件失败: ${error}`);
-                    return;
-                }
-        
-                // 关闭模态框并刷新视图
+                new Notice('书籍已创建');
+                this.view.refresh();
                 this.close();
+            });
+
+        new ButtonComponent(contentEl)
+            .setButtonText('取消')
+            .onClick(() => {
+                this.close();
+            });
+    }
+
+    onClose() {
+        const { contentEl } = this;
+        contentEl.empty();
+    }
+}
+
+class NewItemModal extends Modal {
+    folder: TFolder;
+    view: BookshelfView;
+
+    constructor(app: App, folder: TFolder, view: BookshelfView) {
+        super(app);
+        this.folder = folder;
+        this.view = view;
+    }
+
+    onOpen() {
+        const { contentEl } = this;
+        contentEl.empty();
+        contentEl.createEl('p', { text: '新建', cls: 'modal-title' });
+
+        const nameInput = new TextComponent(contentEl);
+        nameInput.setPlaceholder('输入章节名称...');
+
+        const createFolderButton = new ButtonComponent(contentEl);
+        createFolderButton.setButtonText('新卷')
+            .onClick(async () => {
+                const name = nameInput.getValue();
+                if (name) {
+                    await this.app.vault.createFolder(`${this.folder.path}/${name}`);
+                    new Notice(`Folder '${name}' created.`);
+                    this.view.refresh();
+                    this.close();
+                }
+            });
+
+        const createFileButton = new ButtonComponent(contentEl);
+        createFileButton.setButtonText('新章节')
+            .onClick(async () => {
+                const name = nameInput.getValue();
+                if (name) {
+                    const filePath = `${this.folder.path}/${name}.md`;
+                    await this.app.vault.create(filePath, '');
+                    new Notice(`File '${name}.md' created.`);
+                    this.view.refresh();
+                    this.close();
+                }
             });
     }
 

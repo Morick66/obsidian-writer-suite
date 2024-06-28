@@ -1,0 +1,136 @@
+/*
+
+This CSS file will be included with your plugin, and
+available in the app when your plugin is enabled.
+
+If your plugin does not need CSS, delete this file.
+
+*/
+
+:root {
+    --book-title:  #000;
+    --book-type: #fff;
+    --book-back: #00000080;
+    --book-label: #0000005d;
+}
+
+.theme-dark {
+    --book-title:  #ffffff;
+    --book-type: #000000;
+    --book-back: #ffffff7a;
+    --book-label: #ffffff5d;
+}
+
+.folder-header {
+    font-weight: bold;
+    cursor: pointer;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.file-list {
+    list-style-type: none;
+    padding-left: 20px;
+    margin: 5px 0;
+}
+.view-content>.folder-item>.file-list {
+    margin-left: 0;
+    padding: 0;
+}
+
+.chapter-title,
+.folder-header {
+    display: flex;
+    justify-content: space-between;
+}
+.chapter-title {
+    margin: 3px 0;
+}
+.deleteButton,
+.tocButton>button {
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    height: 20px;
+    width: 20px;
+    margin-left: 5px;
+    font-size: 1em;
+}
+
+.floating-button {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    font-size: 30px;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 5px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 30px;
+}
+
+.modal-title {
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.modal-content>button {
+    margin-left: 5px;
+    float: right;
+}
+
+.modal-content>input {
+    width: 250px;
+}
+
+.book-item {
+    padding: 0.5em;
+    margin: 0.5em 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    aspect-ratio: 2/3;
+    background-color: var(--book-back);
+    box-sizing: border-box;
+}
+
+.book-title {
+    font-weight: bold;
+    color: var(--book-title);
+    font-size: 1.5em;
+    text-align: center;
+    margin-top: 30%;
+}
+
+.book-type {
+    font-style: italic;
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+    color: var(--book-type);
+    background-color: var(--book-label);
+    padding: 2px 5px;
+    font-size: 12px;
+    border-radius: 5px 0 0 5px;
+}
+
+.book-count {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+}
+
+div[data-type="bookshelf-view"] .view-content {
+    padding: 30px !important;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 20px;
+}
+
+.pluginModal {
+    margin-top: 0;
+}

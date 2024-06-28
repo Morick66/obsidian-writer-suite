@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, parseYaml, ButtonComponent, MarkdownRenderer, TextComponent, Modal } from 'obsidian';
+import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, parseYaml, ButtonComponent, TextComponent, Modal, App } from 'obsidian';
 import MyPlugin from '../main';
 import { WordCounter } from '../UtilityFunctions';
 
@@ -38,7 +38,7 @@ export class BookshelfView extends ItemView {
     }
 
     async refresh() {
-        const container = this.containerEl.children[1];
+        const container = this.containerEl.children[1] as HTMLElement;
         const existingContent = container.querySelectorAll('.book-item, ul, p');
         existingContent.forEach(el => el.remove());
 
@@ -88,12 +88,12 @@ export class BookshelfView extends ItemView {
             if (novelFolder && novelFolder instanceof TFolder) {
                 const latestFile = this.getLatestFile(novelFolder);
                 if (latestFile) {
-                    this.app.workspace.openLinkText(latestFile.path, '', false, { mode: 'source' });
+                    this.app.workspace.openLinkText(latestFile.path, '', false);
                 } else {
                     new Notice('未找到最新创建的文件');
                 }
             } else {
-                type === 'novel' ? this.app.workspace.openLinkText(this.plugin.folderPath + '/小说文稿/未命名章节.md', '', false, { mode: 'source' }) : this.app.workspace.openLinkText(this.plugin.folderPath + '/小说正文.md', '', false, { mode: 'source' });
+                type === 'novel' ? this.app.workspace.openLinkText(this.plugin.folderPath + '/小说文稿/未命名章节.md', '', false) : this.app.workspace.openLinkText(this.plugin.folderPath + '/小说正文.md', '', false);
             }
         });
     }

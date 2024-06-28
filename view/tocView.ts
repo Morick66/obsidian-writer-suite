@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, Modal, TextComponent, ButtonComponent} from 'obsidian';
+import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, Modal, TextComponent, ButtonComponent, App} from 'obsidian';
 import MyPlugin from '../main';
 import { WordCounter } from '../UtilityFunctions';
 
@@ -34,9 +34,9 @@ export class TocView extends ItemView {
          // 创建浮动按钮并默认隐藏
         const floatingButton = container.createEl('button', { 
             text: '+', 
-            cls: 'floating-button', 
-            style: 'display: none;'
+            cls: 'floating-button'
         });
+        floatingButton.style.display = 'none';
         floatingButton.title = '新建章节/卷';
         floatingButton.addEventListener('click', () => {
             this.showNewItemModal();
@@ -49,7 +49,7 @@ export class TocView extends ItemView {
 
     // 浮动按钮的显示
     toggleFloatingButton() {
-        const floatingButton = this.containerEl.querySelector('.floating-button');
+        const floatingButton = this.containerEl.querySelector('.floating-button') as HTMLButtonElement;
         if (floatingButton) {
             floatingButton.style.display = this.plugin.folderPath !== "" ? 'block' : 'none';
         }
@@ -65,7 +65,7 @@ export class TocView extends ItemView {
     }
 
     async refresh() {
-        const container = this.containerEl.children[1];
+        const container = this.containerEl.children[1] as HTMLElement;
         const existingContent = container.querySelectorAll('.folder-item, ul, p');
         existingContent.forEach(el => el.remove());
 
@@ -120,8 +120,8 @@ export class TocView extends ItemView {
             this.confirmDelete(folder);
         });
 
-        const fileList = folderItem.createEl('ul', { cls: 'file-list', style: 'display: none;' });
-
+        const fileList = folderItem.createEl('ul', { cls: 'file-list' });
+        fileList.style.display = 'none';
         folderHeader.addEventListener('click', () => {
             fileList.style.display = fileList.style.display === 'none' ? 'block' : 'none';
         });
@@ -175,16 +175,16 @@ export class TocView extends ItemView {
         outline.then(titles => {
             titles.forEach(title => {
                 const outlineItem = outlineList.createEl('li', { text: title });
-                outlineItem.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    this.app.workspace.openLinkText(file.path, '', false, { mode: 'source' });
-                    // 跳转到对应的标题位置
-                    const editor = this.app.workspace.activeLeaf.view.editor;
-                    const line = editor.getValue().split('\n').findIndex(line => line.includes(title));
-                    if (line !== -1) {
-                        editor.setCursor({ line, ch: 0 });
-                    }
-                });
+                // outlineItem.addEventListener('click', (e) => {
+                //     e.stopPropagation();
+                //     this.app.workspace.openLinkText(file.path, '', false);
+                //     // 跳转到对应的标题位置
+                //     const editor = this.app.workspace.activeLeaf.view.editor;
+                //     const line = editor.getValue().split('\n').findIndex(line => line.includes(title));
+                //     if (line !== -1) {
+                //         editor.setCursor({ line, ch: 0 });
+                //     }
+                // });
             });
         });
     }

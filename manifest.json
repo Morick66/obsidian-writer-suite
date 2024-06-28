@@ -2,10 +2,10 @@
 	"id": "writer-suite",
 	"name": "Writer Suite",
 	"version": "0.0.1",
-	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"minAppVersion": "0.0.1",
+	"description": "An obsidian plug-in that is more convenient for writing novels",
+	"author": "Morick",
+	"authorUrl": "",
+	"fundingUrl": "",
 	"isDesktopOnly": false
 }

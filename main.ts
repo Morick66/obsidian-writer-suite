@@ -1,6 +1,7 @@
 import { App, Plugin, PluginSettingTab, Setting, WorkspaceLeaf, TFile } from 'obsidian';
 import { TocView, VIEW_TYPE_FILE_LIST } from './view/tocView';
 import { BookshelfView, VIEW_TYPE_BOOKSHELF } from './view/bookShelfView';
+import { BookSettingView, VIEW_TYPE_BOOK_SETTING } from './view/bookSettingView';
 
 // 插件设置的接口
 interface MyPluginSettings {
@@ -54,13 +55,18 @@ export default class MyPlugin extends Plugin {
         await this.loadSettings();
 
         // 添加具有所需图标名称的新功能区图标
-        this.addRibbonIcon('folder-open', 'File List', () => {
+        this.addRibbonIcon('folder-open', '目录', () => {
             this.activateView(VIEW_TYPE_FILE_LIST);
         });
 
         // 添加激活书架视图的功能区图标
-        this.addRibbonIcon('book', 'Bookshelf', () => {
+        this.addRibbonIcon('book', '书架', () => {
             this.activateView(VIEW_TYPE_BOOKSHELF);
+        });
+
+        // 添加激活书架视图的功能区图标
+        this.addRibbonIcon('book-text', '设定', () => {
+            this.activateView(VIEW_TYPE_BOOK_SETTING);
         });
 
         this.registerView(
@@ -71,6 +77,11 @@ export default class MyPlugin extends Plugin {
         this.registerView(
             VIEW_TYPE_BOOKSHELF,
             (leaf: WorkspaceLeaf) => new BookshelfView(leaf, this)
+        );
+
+        this.registerView(
+            VIEW_TYPE_BOOK_SETTING,
+            (leaf: WorkspaceLeaf) => new BookSettingView(leaf, this)
         );
 
         this.addSettingTab(new MyPluginSettingTab(this.app, this));
@@ -96,10 +107,14 @@ export default class MyPlugin extends Plugin {
 
     async activateView(viewType: string) {
         this.app.workspace.detachLeavesOfType(viewType);
-
-        const rightLeaf = this.app.workspace.getRightLeaf(false);
-        if (rightLeaf) {
-            await rightLeaf.setViewState({
+        let centerLeaf = this.app.workspace.getMostRecentLeaf();
+        if (viewType === VIEW_TYPE_FILE_LIST) {
+            centerLeaf = this.app.workspace.getLeftLeaf(false);
+        } else if (viewType === VIEW_TYPE_BOOK_SETTING) {
+            centerLeaf = this.app.workspace.getRightLeaf(false);
+        }
+        if (centerLeaf) {
+            await centerLeaf.setViewState({
                 type: viewType,
                 active: true,
                 state: { icon: viewType === VIEW_TYPE_FILE_LIST ? 'folder-open' : 'book' }

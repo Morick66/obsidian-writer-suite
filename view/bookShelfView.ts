@@ -1,6 +1,6 @@
 import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, parseYaml, ButtonComponent, TextComponent, Modal, App } from 'obsidian';
 import MyPlugin from '../main';
-import { WordCounter } from '../UtilityFunctions';
+import { WordCounter } from '../helper/WordCount';
 
 export const VIEW_TYPE_BOOKSHELF = 'bookshelf-view';
 

@@ -191,3 +191,21 @@ div[data-type="book-setting"]>.file-item>.file-title {
     flex-direction: row;
     justify-content: space-around;
 }
+
+.set-main-container {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+}
+.tabs-container {
+    background-color: aqua;
+    width: 50px;
+}
+.list-container {
+    background-color:yellow;
+    width: 150px;
+}
+.item-container {
+    background-color: tomato;
+    width: calc(100% - 200px);
+}

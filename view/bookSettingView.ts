@@ -1,7 +1,6 @@
 // book-setting-view.ts
 import { ItemView, WorkspaceLeaf, TFolder, TFile } from 'obsidian';
 import MyPlugin from '../main';
-import { TocView } from './tocView';
 
 export const VIEW_TYPE_BOOK_SETTING = 'book-setting';
 
@@ -37,7 +36,7 @@ export class BookSettingView extends ItemView {
         if (this.plugin.folderPath === '') {
             await this.showInspiration();
         } else {
-            this.createTabs();
+            this.createSetView();
             await this.showViewContent('大纲');
         }
     }
@@ -71,15 +70,19 @@ export class BookSettingView extends ItemView {
     async showViewContent(tabName: string) {
         this.contentContainer.empty();
         const settingFolderPath = `${this.plugin.folderPath}/设定/${tabName}`;
-        const folder = this.app.vault.getAbstractFileByPath(settingFolderPath);
-        TocView.displayItems(this.contentContainer, folder);
+        this.app.vault.getAbstractFileByPath(settingFolderPath);
     }
-    createTabs() {
-        this.tabsContainer = this.containerEl.createDiv({ cls: 'setting-tabs' });
+    createSetView() {
+        const setMainContainer = this.containerEl.createDiv({ cls: 'set-main-container' });
+        const itemContainer = setMainContainer.createDiv({ cls: 'item-container' });
+        const listContainer = setMainContainer.createDiv({ cls: 'list-container' });
+        const tabsContainer = setMainContainer.createDiv({ cls: 'tabs-container' });
+
+        
         const tabs = ['大纲', '角色', '设定', '灵感'];
 
         tabs.forEach(tabName => {
-            const button = this.tabsContainer.createEl('button', { text: tabName });
+            const button = tabsContainer.createEl('button', { text: tabName });
             button.addEventListener('click', () => this.showViewContent(tabName));
         });
     }

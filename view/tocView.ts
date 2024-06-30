@@ -1,6 +1,6 @@
 import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, Modal, TextComponent, ButtonComponent, App} from 'obsidian';
 import MyPlugin from '../main';
-import { WordCounter } from '../UtilityFunctions';
+import { WordCounter } from '../helper/WordCount';
 
 export const VIEW_TYPE_FILE_LIST = 'file-list-view';
 export const NEW_ITEM_MODAL = 'new-item-modal';
@@ -271,6 +271,7 @@ export class NewChapterModal extends Modal {
     }
 }
 
+// 新建条目模态框
 export class NewItemModal extends Modal {
     folder: TFolder;
     view: TocView;

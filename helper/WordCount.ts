@@ -1,5 +1,5 @@
 import { TFile, TFolder } from 'obsidian';
-import MyPlugin from './main';
+import MyPlugin from '../main';
 
 // WordCounter类，用于统计字数
 export class WordCounter {
@@ -40,4 +40,11 @@ export class WordCounter {
         await calculateWordCount(folder);
         return totalWordCount;
     }
+}
+
+// 辅助函数，用于创建SVG元素
+export async function createSvgElement(svgCode: string) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svgCode, 'text/html');
+    return doc.body.firstChild;
 }

@@ -231,7 +231,7 @@ export class TocView extends ItemView {
 }
 
 // 新建章节的模态框
-class NewChapterModal extends Modal {
+export class NewChapterModal extends Modal {
     folder: TFolder;
     view: TocView;
 
@@ -271,7 +271,7 @@ class NewChapterModal extends Modal {
     }
 }
 
-class NewItemModal extends Modal {
+export class NewItemModal extends Modal {
     folder: TFolder;
     view: TocView;
 
@@ -322,7 +322,7 @@ class NewItemModal extends Modal {
 }
 
 // 删除确认的模态框
-class ConfirmDeleteModal extends Modal {
+export class ConfirmDeleteModal extends Modal {
     fileOrFolder: TFile | TFolder;
     view: TocView;
 

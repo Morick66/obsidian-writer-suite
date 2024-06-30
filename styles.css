@@ -185,3 +185,9 @@ div[data-type="book-setting"]>.file-item>.file-title {
     font-size: 1.2em;
     font-weight: bold;
 }
+
+.setting-tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}

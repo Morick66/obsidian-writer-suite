@@ -12,6 +12,7 @@ If your plugin does not need CSS, delete this file.
     --book-type: #fff;
     --book-back: #00000080;
     --book-label: #0000005d;
+    --file-item: #00000062;
 }
 
 .theme-dark {
@@ -19,6 +20,7 @@ If your plugin does not need CSS, delete this file.
     --book-type: #000000;
     --book-back: #ffffff7a;
     --book-label: #ffffff5d;
+    --file-item-bgc: #ffffff62;
 }
 
 .folder-header {
@@ -89,13 +91,16 @@ If your plugin does not need CSS, delete this file.
 .book-item {
     padding: 0.5em;
     margin: 0.5em 0;
-    border: 1px solid #ccc;
+    border: 1.5px solid transparent;
     border-radius: 4px;
     cursor: pointer;
     position: relative;
     aspect-ratio: 2/3;
     background-color: var(--book-back);
     box-sizing: border-box;
+}
+.book-item:hover {
+    border: 1.5px solid var(--interactive-accent);
 }
 
 .book-title {
@@ -151,6 +156,7 @@ If your plugin does not need CSS, delete this file.
     margin-top: 20px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .info-form {
     display: flex;
@@ -158,4 +164,24 @@ If your plugin does not need CSS, delete this file.
 
 .desc-label {
     flex-grow: 2;
+}
+div[data-type="book-setting"] {
+    padding: 20px;
+}
+div[data-type="book-setting"]>.file-item {
+    background-color: var(--file-item-bgc);
+    box-sizing: border-box;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+}
+
+div[data-type="book-setting"]>.file-item:hover {
+    border: 2px solid var(--interactive-accent);
+}
+
+div[data-type="book-setting"]>.file-item>.file-title {
+    font-size: 1.2em;
+    font-weight: bold;
 }

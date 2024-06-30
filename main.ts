@@ -103,6 +103,11 @@ export default class MyPlugin extends Plugin {
         if (bookshelfView instanceof BookshelfView) {
             bookshelfView.refresh();
         }
+
+        const booksettingView = this.app.workspace.getLeavesOfType(VIEW_TYPE_BOOK_SETTING)[0]?.view;
+        if (booksettingView instanceof BookSettingView) {
+            booksettingView.refresh();
+        }
     }
 
     async activateView(viewType: string) {
@@ -129,15 +134,21 @@ export default class MyPlugin extends Plugin {
     async setFolderPath(path: string) {
         this.folderPath = path;
         await this.saveSettings();
-        const tocView = this.app.workspace.getLeavesOfType(VIEW_TYPE_FILE_LIST)[0]?.view as TocView;
-        tocView.updateTitle();
         this.refreshTocView();
+        this.refreshBookSettingView();
     }
 
     refreshTocView() {
         const tocView = this.app.workspace.getLeavesOfType(VIEW_TYPE_FILE_LIST)[0]?.view as TocView;
         if (tocView) {
+            tocView.updateTitle();
             tocView.refresh();
+        }
+    }
+    refreshBookSettingView() {
+        const bookSettingView = this.app.workspace.getLeavesOfType(VIEW_TYPE_BOOK_SETTING)[0]?.view as BookSettingView;
+        if (bookSettingView) {
+            bookSettingView.refresh();
         }
     }
 

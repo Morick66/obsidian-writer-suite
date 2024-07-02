@@ -1,6 +1,7 @@
-import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, Modal, TextComponent, ButtonComponent, App} from 'obsidian';
+import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, Modal, TextComponent, ButtonComponent, App, setIcon, MarkdownView} from 'obsidian';
 import MyPlugin from '../main';
 import { WordCounter } from '../helper/WordCount';
+import { ConfirmDeleteModal } from 'helper/Modal';
 
 export const VIEW_TYPE_FILE_LIST = 'file-list-view';
 export const NEW_ITEM_MODAL = 'new-item-modal';
@@ -30,13 +31,12 @@ export class TocView extends ItemView {
         container.empty();
 
         const title = container.createEl('h2', { text: '' });
-        
         title.className = 'view-title';
          // 创建浮动按钮并默认隐藏
-        const floatingButton = container.createEl('button', { 
-            text: '+', 
+        const floatingButton = container.createEl('button', {
             cls: 'floating-button'
         });
+        setIcon(floatingButton, 'plus');
         floatingButton.style.display = 'none';
         floatingButton.title = '新建章节/卷';
         floatingButton.addEventListener('click', () => {
@@ -67,7 +67,7 @@ export class TocView extends ItemView {
 
     async refresh() {
         const container = this.containerEl.children[1] as HTMLElement;
-        const existingContent = container.querySelectorAll('.folder-item, ul, p');
+        const existingContent = container.querySelectorAll('.folder-item, ul, p, .info-container');
         existingContent.forEach(el => el.remove());
 
         // 获取小说文稿文件夹路径，用于长篇小说
@@ -84,8 +84,23 @@ export class TocView extends ItemView {
         } else if (shortStoryFile && shortStoryFile instanceof TFile) {
             // 如果是短篇小说，展示大纲
             this.displayOutline(container, shortStoryFile);
+        } else {
+            this.displayInfo(container);
         }
         this.toggleFloatingButton();
+    }
+    displayInfo(container: HTMLElement) {
+        const { settings } = this.plugin;
+        const infoContainer = container.createDiv({ cls: 'info-container' });
+        // 如果用户设置了图片路径，展示图片
+        if (settings.picturePath) {
+            infoContainer.createEl('img', {
+                attr: { src: settings.picturePath },
+                cls: 'user-avatar'
+            });
+        }
+        infoContainer.createEl('h1', { text: settings.name, cls: 'user-name' });
+        infoContainer.createEl('div', { text: `7本书籍|共5.551k字`, cls: 'easyData' });
     }
 
     displayItems(container: HTMLElement, folder: TFolder) {
@@ -101,16 +116,23 @@ export class TocView extends ItemView {
 
     displayFolder(container: HTMLElement, folder: TFolder) {
         const folderItem = container.createDiv({ cls: 'folder-item' });
-        const folderHeader = folderItem.createEl('div', { cls: 'folder-header', text: folder.name });
+        const folderHeader = folderItem.createEl('div', { cls: 'folder-header' });
+        const folderName = folderHeader.createEl('div',{cls: 'folder-name'});
+        const folderIcon = folderName.createEl('span');
+        setIcon(folderIcon, 'folder-open');
+        folderName.createSpan({text: folder.name})
+        
         const tocButton = folderHeader.createEl('div', { cls: 'tocButton' });
         
-        const addButton = tocButton.createEl('button', { text: '+' });
+        const addButton = tocButton.createEl('button');
+        setIcon(addButton, 'plus')
 
-        const deleteButton = tocButton.createEl('button', { text: '×'});
+        const deleteButton = tocButton.createEl('button');
+        setIcon(deleteButton, 'trash')
         deleteButton.title = "删除文件夹";
 
 
-        addButton.title = "New...";
+        addButton.title = "新建章节";
         addButton.addEventListener('click', (e) => {
             e.stopPropagation();
             this.showNewChapterModal(folder);
@@ -124,7 +146,13 @@ export class TocView extends ItemView {
         const fileList = folderItem.createEl('ul', { cls: 'file-list' });
         fileList.style.display = 'block';
         folderHeader.addEventListener('click', () => {
-            fileList.style.display = fileList.style.display === 'none' ? 'block' : 'none';
+            if (fileList.style.display === 'none') {
+                fileList.style.display = 'block'
+                setIcon(folderIcon, 'folder-open');
+            } else {
+                fileList.style.display = 'none'
+                setIcon(folderIcon, 'folder-minus');
+            }
         });
 
         const sortedChildren = folder.children.sort((a, b) => {
@@ -147,13 +175,17 @@ export class TocView extends ItemView {
     }
 
     async displayFile(container: HTMLElement, file: TFile) {
-        const fileName = file.name.replace(/\.md$/, '');
-        const fileItem = container.createEl('li', {cls: "chapter-title", text: `${fileName} (loading...)` });
-
+        const fileItem = container.createEl('li', {cls: "chapter-title" });
+        const fileHeader = fileItem.createEl('div', { cls: 'file-header' });
+        const fileIcon = fileHeader.createEl('span');
+        setIcon(fileIcon, 'file-text');
+        const fileName = fileHeader.createEl('span');
         const wordCount = await this.wordCounter.getWordCount(file);
-        fileItem.textContent = `${fileName} (${wordCount} 字)`;
+        fileName.textContent = `${file.name.replace(/\.md$/, '')}`;
 
-        const deleteButton = fileItem.createEl('button', { text: '×', cls: 'deleteButton' });
+        const deleteButton = fileItem.createEl('button', { cls: 'deleteButton' });
+        fileItem.createEl('div', { cls: 'word-count', text: `${wordCount}` });
+        setIcon(deleteButton, 'trash')
         deleteButton.title = "删除文件";
         deleteButton.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -166,35 +198,107 @@ export class TocView extends ItemView {
 
         fileItem.dataset.path = file.path;
     }
-
-    // 在 TocView 类中添加一个新的方法来展示大纲
-    displayOutline(container: HTMLElement, file: TFile) {
-        container.empty(); // 清空容器内容
-        const outline = this.getOutline(file); // 假设这是获取文件大纲的方法
-        const outlineList = container.createEl('ul', { cls: 'outline-list' });
-
-        outline.then(titles => {
-            titles.forEach(title => {
-                outlineList.createEl('li', { text: title });
-                // outlineItem.addEventListener('click', (e) => {
-                //     e.stopPropagation();
-                //     this.app.workspace.openLinkText(file.path, '', false);
-                //     // 跳转到对应的标题位置
-                //     const editor = this.app.workspace.activeLeaf.view.editor;
-                //     const line = editor.getValue().split('\n').findIndex(line => line.includes(title));
-                //     if (line !== -1) {
-                //         editor.setCursor({ line, ch: 0 });
-                //     }
-                // });
-            });
-        });
+    // 展示大纲的方法
+    async displayOutline(container: HTMLElement, file: TFile) {
+        const outline = await this.getOutline(file); // 获取文件大纲的方法
+        this.renderOutlineList(container, outline, 1, file); // 根级别从1开始（即#）
     }
+
+    // 递归渲染大纲列表的方法
+    async renderOutlineList(container: HTMLElement, titles: string[], level: number, file: TFile) {
+        const listType = level === 1 ? 'ul' : 'ol'; // 根级别使用无序列表，其他使用有序列表
+        const list = container.createEl(listType, { cls: 'outline-list' });
+
+        while (titles.length > 0) {
+            const title = titles.shift();
+            if (title) {
+                const [text, nestedTitles] = this.splitTitleAndChildren(title, titles);
+
+                // 创建包含标题文本的 div
+                const titleDiv = list.createEl('div', { text });
+                titleDiv.className = 'outline-title'; // 添加类名
+
+                // 创建列表项，并将标题 div 添加为其子元素
+                const listItem = list.createEl('li');
+                listItem.appendChild(titleDiv);
+
+                // 根据标题级别添加缩进效果
+                listItem.style.paddingLeft = `${10}px`; // 为每个级别添加10px的缩进
+
+                // 添加点击事件以定位到文件中的标题位置
+                listItem.addEventListener('click', () => this.scrollToTitle(file, title));
+
+                // 如果有子标题，递归渲染子标题列表
+                if (nestedTitles.length > 0) {
+                    this.renderOutlineList(listItem, nestedTitles, level + 1, file);
+                }
+            }
+        }
+
+        // 将当前列表项添加到容器中
+        container.appendChild(list);
+    }
+
+    splitTitleAndChildren(title: string, remainingTitles: string[]): [string, string[]] {
+        const match = title.match(/^(#+)\s*(.*)/);
+        if (match) {
+            const headerLevel = match[1].length;
+            const text = match[2]; // 提取标题文本
+
+            // 找出所有子标题
+            const nestedTitles: string[] = [];
+            for (let i = 0; i < remainingTitles.length; i++) {
+                const nextTitle = remainingTitles[i];
+                const nextMatch = nextTitle.match(/^(#+)\s*(.*)/);
+                if (nextMatch) {
+                    const nextHeaderLevel = nextMatch[1].length;
+                    if (nextHeaderLevel > headerLevel) {
+                        nestedTitles.push(nextTitle);
+                    } else if (nextHeaderLevel <= headerLevel) {
+                        break;
+                    }
+                }
+            }
+
+            // 从 remainingTitles 中移除已处理的子标题
+            remainingTitles.splice(0, nestedTitles.length);
+
+            return [text, nestedTitles];
+        } else {
+            // 如果没有匹配，返回原始标题文本和空的子标题数组
+            return [title, []];
+        }
+    }
+
+    // 定位到文件中的标题位置的方法
+    async scrollToTitle(file: TFile, title: string) {
+        const fileContent = await this.app.vault.read(file);
+        const lines = fileContent.split('\n');
+        const titleIndex = lines.findIndex(line => line.trim() === title);
+
+        if (titleIndex !== -1) {
+            const activeLeaf = this.app.workspace.getLeaf();
+            if (activeLeaf) {
+                const view = activeLeaf.view;
+                if (view instanceof MarkdownView) {
+                    const editor = view.editor;
+                    editor.setCursor({ line: titleIndex, ch: 0 });
+
+                    // 使用 scrollIntoView 选项参数
+                    editor.scrollIntoView({ from: { line: titleIndex, ch: 0 }, to: { line: titleIndex, ch: 0 } }, true);
+                }
+            }
+        }
+    }
+
+    // 假设的获取文件大纲的方法，需要您根据实际情况实现
     async getOutline(file: TFile): Promise<string[]> {
         const fileContents = await this.app.vault.read(file);
         const lines = fileContents.split('\n');
-        const titles = lines.filter(line => line.startsWith('#')).map(line => line.replace(/^#+\s*/, ''));
+        const titles = lines.filter(line => line.startsWith('#')).map(line => line.trim());
         return titles;
     }
+
     async updateFile(file: TFile) {
         const fileItem = this.containerEl.querySelector(`li[data-path="${file.path}"]`);
         if (fileItem) {
@@ -221,7 +325,7 @@ export class TocView extends ItemView {
     }
     
     confirmDelete(fileOrFolder: TFile | TFolder) {
-        const modal = new ConfirmDeleteModal(this.app, fileOrFolder, this);
+        const modal = new ConfirmDeleteModal(this.app, fileOrFolder, this, this.refresh);
         modal.open();
     }
 
@@ -313,46 +417,6 @@ export class NewItemModal extends Modal {
                     this.view.refresh();
                     this.close();
                 }
-            });
-    }
-
-    onClose() {
-        const { contentEl } = this;
-        contentEl.empty();
-    }
-}
-
-// 删除确认的模态框
-export class ConfirmDeleteModal extends Modal {
-    fileOrFolder: TFile | TFolder;
-    view: TocView;
-
-    constructor(app: App, fileOrFolder: TFile | TFolder, view: TocView) {
-        super(app);
-        this.fileOrFolder = fileOrFolder;
-        this.view = view;
-    }
-
-    onOpen() {
-        const { contentEl } = this;
-        contentEl.createEl('h2', { cls: 'pluginModal', text: '确认删除' });
-
-        const fileType = this.fileOrFolder instanceof TFile ? '文件' : '文件夹';
-        contentEl.createEl('p', { text: `你确定要删除这个${fileType}吗？` });
-
-        new ButtonComponent(contentEl)
-            .setButtonText('删除')
-            .setCta()
-            .onClick(async () => {
-                await this.app.vault.trash(this.fileOrFolder, false);
-                this.close();
-                this.view.refresh();
-            });
-
-        new ButtonComponent(contentEl)
-            .setButtonText('取消')
-            .onClick(() => {
-                this.close();
             });
     }
 

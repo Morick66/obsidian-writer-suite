@@ -7,22 +7,6 @@ If your plugin does not need CSS, delete this file.
 
 */
 
-:root {
-    --book-title:  #000;
-    --book-type: #fff;
-    --book-back: #00000080;
-    --book-label: #0000005d;
-    --file-item: #00000062;
-}
-
-.theme-dark {
-    --book-title:  #ffffff;
-    --book-type: #000000;
-    --book-back: #ffffff7a;
-    --book-label: #ffffff5d;
-    --file-item-bgc: #ffffff62;
-}
-
 .folder-header {
     font-weight: bold;
     cursor: pointer;
@@ -30,23 +14,64 @@ If your plugin does not need CSS, delete this file.
     align-items: center;
 }
 
+.folder-header:hover {
+    border-color: var(--interactive-accent);
+}
+
 .file-list {
     list-style-type: none;
     padding-left: 20px;
     margin: 5px 0;
+    border: 1px solid transparent;
+    border-radius: 5px;
 }
+
 .view-content>.folder-item>.file-list {
     margin-left: 0;
     padding: 0;
 }
-
+.chapter-title {
+    margin-left: 10px;
+}
 .chapter-title,
 .folder-header {
     display: flex;
+    align-items: center;
     justify-content: space-between;
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
-.chapter-title {
-    margin: 3px 0;
+.chapter-title:hover,
+.folder-header:hover {
+    border-color: var(--interactive-accent);
+}
+
+.chapter-title>.deleteButton {
+    display: none;
+}
+.chapter-title:hover>.deleteButton {
+    display: flex;
+}
+.chapter-title>.word-count {
+    display: block;
+    font-size: 0.8em;
+    opacity: 0.5;
+}
+.chapter-title:hover>.word-count {
+    display: none;
+}
+.file-header,
+.folder-name {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.folder-name svg,
+.file-header svg {
+    display: flex;
+    align-items: center;
 }
 .deleteButton,
 .tocButton>button {
@@ -61,16 +86,18 @@ If your plugin does not need CSS, delete this file.
 
 .floating-button {
     position: absolute;
+    box-sizing: border-box;
     right: 20px;
     bottom: 20px;
-    font-size: 30px;
-    font-weight: bold;
     border-radius: 10px;
     padding: 5px;
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    line-height: 30px;
+    width: max-content;
+    height: 35px;
+}
+.floating-button svg {
+    width: 25px;
+    height: 25px;
+    stroke-width: 3;
 }
 
 .modal-title {
@@ -96,7 +123,7 @@ If your plugin does not need CSS, delete this file.
     cursor: pointer;
     position: relative;
     aspect-ratio: 2/3;
-    background-color: var(--book-back);
+    background-color: var(--tab-container-background);
     box-sizing: border-box;
 }
 .book-item:hover {
@@ -105,7 +132,7 @@ If your plugin does not need CSS, delete this file.
 
 .book-title {
     font-weight: bold;
-    color: var(--book-title);
+    color: var(--inline-title-color);
     font-size: 1.5em;
     text-align: center;
     margin-top: 30%;
@@ -116,8 +143,8 @@ If your plugin does not need CSS, delete this file.
     position: absolute;
     bottom: 10px;
     right: 0;
-    color: var(--book-type);
-    background-color: var(--book-label);
+    color: var(--text-normal);
+    background-color: var(--background-primary);
     padding: 2px 5px;
     font-size: 12px;
     border-radius: 5px 0 0 5px;
@@ -165,25 +192,34 @@ If your plugin does not need CSS, delete this file.
 .desc-label {
     flex-grow: 2;
 }
-div[data-type="book-setting"] {
-    padding: 20px;
-}
-div[data-type="book-setting"]>.file-item {
-    background-color: var(--file-item-bgc);
+.inspiration-item {
+    position: relative;
+    background-color: var(--tab-container-background);
     box-sizing: border-box;
     padding: 10px 15px;
-    margin-bottom: 20px;
+    margin: 0 20px 20px 20px;
     border-radius: 10px;
     border: 2px solid transparent;
 }
 
-div[data-type="book-setting"]>.file-item:hover {
+.inspiration-item:hover {
     border: 2px solid var(--interactive-accent);
 }
 
-div[data-type="book-setting"]>.file-item>.file-title {
+.inspiration-item>.file-title {
     font-size: 1.2em;
     font-weight: bold;
+}
+div[data-type="book-setting"]>.view-title {
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+div[data-type="book-setting"]>.view-title svg {
+    width: 20px;
+    height: 20px;
+    stroke-width: 3;
 }
 
 .setting-tabs {
@@ -198,14 +234,84 @@ div[data-type="book-setting"]>.file-item>.file-title {
     height: 100%;
 }
 .tabs-container {
-    background-color: aqua;
     width: 50px;
+    border-left: var(--divider-width) solid var(--divider-color);
+    background-color: var(--ribbon-background);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+.tabs-bottom {
+    margin-bottom: 17px;
+}
+
 .list-container {
-    background-color:yellow;
     width: 150px;
+    border-left: var(--divider-width) solid var(--divider-color);
 }
 .item-container {
-    background-color: tomato;
     width: calc(100% - 200px);
+}
+
+.tab-button {
+    width: max-content;
+    height: max-content;
+    margin: 10px auto;
+    padding-bottom: 10px;
+    border-bottom: var(--divider-width) solid var(--divider-color);
+}
+.tab-button svg {
+    width: 20px;
+    height: 20px;
+}
+.tab-button .tab-name {
+    text-align: center;
+    font-size: 10px;
+}
+.inspiration-textarea {
+    margin-top: 10px;
+}
+.deleteButtonPlus {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    width: 18px;
+    height: 18px;
+    display: none;
+}
+.deleteButtonPlus:hover svg {
+    stroke: var(--interactive-accent);
+}
+.deleteButtonPlus svg {
+    width: 18px;
+    height: 18px;
+}
+.inspiration-item:hover >.deleteButtonPlus,
+.book-item:hover >.deleteButtonPlus {
+    display: block;
+}
+
+div[data-type="file-list-view"] ul, ol {
+    list-style-type: none; /* 去除项目符号或编号 */
+    padding: 0;
+}
+div[data-type="file-list-view"] .outline-title {
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+div[data-type="file-list-view"] .outline-title:hover {
+    border-color: var(--interactive-accent);
+}
+
+.info-container {
+    text-align: center;
+}
+
+.info-container .user-avatar {
+    margin-top: 20px;
+    border-radius: 50%;
+    width: 50%;
 }

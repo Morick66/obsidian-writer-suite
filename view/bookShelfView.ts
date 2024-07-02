@@ -1,6 +1,7 @@
-import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, parseYaml, ButtonComponent, TextComponent, Modal, App } from 'obsidian';
+import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, parseYaml, ButtonComponent, TextComponent, Modal, App, setIcon } from 'obsidian';
 import MyPlugin from '../main';
 import { WordCounter } from '../helper/WordCount';
+import { ConfirmDeleteModal } from 'helper/Modal';
 
 export const VIEW_TYPE_BOOKSHELF = 'bookshelf-view';
 
@@ -30,7 +31,8 @@ export class BookshelfView extends ItemView {
         container.empty();
 
         // 添加浮动按钮
-        const floatingButton = container.createEl('button', { text: '+', cls: 'floating-button' });
+        const floatingButton = container.createEl('button', { cls: 'floating-button' });
+        setIcon(floatingButton, 'plus');
         floatingButton.title = '新建书籍';
         floatingButton.addEventListener('click', () => {
             this.showNewBookModal();
@@ -39,7 +41,7 @@ export class BookshelfView extends ItemView {
         // 创建书籍列表容器
         this.bookListContainer = container.createDiv({ cls: 'book-list-container' });
 
-        await this.refresh();
+        this.refresh();
     }
 
     async refresh() {
@@ -50,17 +52,6 @@ export class BookshelfView extends ItemView {
         const folder = this.app.vault.getAbstractFileByPath(rootFolder);
         if (folder && folder instanceof TFolder) {
             await this.displayBooks(this.bookListContainer, folder);
-        }
-    }
-
-    async showNewItemModal() {
-        const rootFolderPath = this.plugin.folderPath + '/小说文稿';
-        const folder = this.app.vault.getAbstractFileByPath(rootFolderPath);
-        if (folder && folder instanceof TFolder) {
-            const modal = new NewItemModal(this.app, folder, this);
-            modal.open();
-        } else {
-            new Notice(`文件夹未发现: ${rootFolderPath}`);
         }
     }
 
@@ -94,6 +85,13 @@ export class BookshelfView extends ItemView {
         bookItem.createEl('div', { cls: 'book-title', text: `${folder.name}` });
         bookItem.createEl('div', { cls: 'book-count', text: `${totalWordCount} 字` });
         bookItem.createEl('div', { cls: 'book-type', text: type === 'novel' ? '长篇' : '短篇' });
+        const deleteButton = bookItem.createEl('div', { text: '删除', cls: 'deleteButtonPlus' });
+        setIcon(deleteButton, 'trash');
+        deleteButton.title = "删除灵感";
+        deleteButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.confirmDelete(folder);
+        });
 
         bookItem.addEventListener('click', () => {
             this.plugin.setFolderPath(folder.path);
@@ -104,7 +102,7 @@ export class BookshelfView extends ItemView {
                 if (latestFile) {
                     this.app.workspace.openLinkText(latestFile.path, '', false);
                 } else {
-                    this.showNewItemModal();
+                    new Notice('未发现最新文件');
                 }
             } else {
                 type === 'novel' ? this.app.workspace.openLinkText(this.plugin.folderPath + '/小说文稿/未命名章节.md', '', false) : this.app.workspace.openLinkText(this.plugin.folderPath + '/小说正文.md', '', false);
@@ -135,6 +133,12 @@ export class BookshelfView extends ItemView {
     
         traverseFolder(folder);
         return latestFile;
+    }
+
+    // 删除文件或文件夹
+    confirmDelete(fileOrFolder: TFile | TFolder) {
+        const modal = new ConfirmDeleteModal(this.app, fileOrFolder, this, this.refresh);
+        modal.open();
     }
 
     async showNewBookModal() {
@@ -231,7 +235,6 @@ class NewBookModal extends Modal {
                 }
 
                 new Notice('书籍已创建');
-                this.view.refresh();
                 this.close();
             });
 
@@ -239,56 +242,6 @@ class NewBookModal extends Modal {
             .setButtonText('取消')
             .onClick(() => {
                 this.close();
-            });
-    }
-
-    onClose() {
-        const { contentEl } = this;
-        contentEl.empty();
-    }
-}
-
-class NewItemModal extends Modal {
-    folder: TFolder;
-    view: BookshelfView;
-
-    constructor(app: App, folder: TFolder, view: BookshelfView) {
-        super(app);
-        this.folder = folder;
-        this.view = view;
-    }
-
-    onOpen() {
-        const { contentEl } = this;
-        contentEl.empty();
-        contentEl.createEl('p', { text: '新建', cls: 'modal-title' });
-
-        const nameInput = new TextComponent(contentEl);
-        nameInput.setPlaceholder('输入章节名称...');
-
-        const createFolderButton = new ButtonComponent(contentEl);
-        createFolderButton.setButtonText('新卷')
-            .onClick(async () => {
-                const name = nameInput.getValue();
-                if (name) {
-                    await this.app.vault.createFolder(`${this.folder.path}/${name}`);
-                    new Notice(`Folder '${name}' created.`);
-                    this.view.refresh();
-                    this.close();
-                }
-            });
-
-        const createFileButton = new ButtonComponent(contentEl);
-        createFileButton.setButtonText('新章节')
-            .onClick(async () => {
-                const name = nameInput.getValue();
-                if (name) {
-                    const filePath = `${this.folder.path}/${name}.md`;
-                    await this.app.vault.create(filePath, '');
-                    new Notice(`File '${name}.md' created.`);
-                    this.view.refresh();
-                    this.close();
-                }
             });
     }
 

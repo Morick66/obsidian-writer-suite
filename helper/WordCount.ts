@@ -41,10 +41,3 @@ export class WordCounter {
         return totalWordCount;
     }
 }
-
-// 辅助函数，用于创建SVG元素
-export async function createSvgElement(svgCode: string) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(svgCode, 'text/html');
-    return doc.body.firstChild;
-}

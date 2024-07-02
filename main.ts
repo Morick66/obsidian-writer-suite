@@ -5,11 +5,17 @@ import { BookSettingView, VIEW_TYPE_BOOK_SETTING } from './view/bookSettingView'
 
 // 插件设置的接口
 interface MyPluginSettings {
+    // 姓名
+    name: string;
+    picturePath: string; // 新增图片路径设置项
+    // 是否计算标点符号
     countPunctuation: boolean;
 }
 
 // 默认设置
 const DEFAULT_SETTINGS: MyPluginSettings = {
+    name: '',
+    picturePath: '',
     countPunctuation: false,
 }
 
@@ -28,7 +34,29 @@ class MyPluginSettingTab extends PluginSettingTab {
         containerEl.empty();
 
         containerEl.createEl('h2', { text: '插件设置' });
+        new Setting(containerEl)
+        .setName('姓名')
+        .addText(text => {
+            text.setValue(this.plugin.settings.name).onChange(async (value) => {
+                this.plugin.settings.name = value;
+                await this.plugin.saveSettings();
+                this.plugin.refreshTocView(); 
+            });
+        });
 
+        // 添加标点符号计数设置
+        // ... 现有代码 ...
+
+        // 添加图片路径输入（假设是相对路径或URL）
+        new Setting(containerEl)
+            .setName('头像图片路径')
+            .addText(text => {
+                text.setValue(this.plugin.settings.picturePath).onChange(async (value) => {
+                    this.plugin.settings.picturePath = value;
+                    await this.plugin.saveSettings();
+                    this.plugin.refreshTocView(); 
+                });
+            });
         new Setting(containerEl)
             .setName('标点符号计数')
             .setDesc('标点符号计算为一个字符')

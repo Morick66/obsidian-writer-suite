@@ -100,7 +100,48 @@ export class TocView extends ItemView {
             });
         }
         infoContainer.createEl('h1', { text: settings.name, cls: 'user-name' });
-        infoContainer.createEl('div', { text: `7本书籍|共5.551k字`, cls: 'easyData' });
+        this.getBookCountAndTotalWords().then(({ novelCount, shortStoryCount }) => {
+            // 格式化显示文本
+            const novelText = novelCount > 0 ? `${novelCount}` : "0";
+            const shortStoryText = shortStoryCount > 0 ? `${shortStoryCount}` : "0";
+    
+            // 创建显示文本的div元素
+            const infoText = [
+                `长篇小说: ${novelText}`,
+                `短篇小说: ${shortStoryText}`,
+            ].join(' | ');
+    
+            infoContainer.createDiv({ text: infoText, cls: 'book-info' });
+        });
+    }
+
+    // 异步方法，用于获取书籍数量和总字数
+    async getBookCountAndTotalWords(): Promise<{ novelCount: number; shortStoryCount: number }> {
+        const rootFolder = this.app.vault.getRoot(); // 获取根目录
+        let novelCount = 0;
+        let shortStoryCount = 0;
+
+        const processFolder = async (folder: TFolder) => {
+            for (const file of folder.children) {
+                if (file instanceof TFile && file.path.endsWith('信息.md')) {
+                    const content = await this.app.vault.read(file);
+                    const type = this.getFileType(content); // 您需要实现这个方法来从内容中提取type
+                    if (type === 'novel') novelCount++;
+                    if (type === 'short-story') shortStoryCount++;
+                } else if (file instanceof TFolder) {
+                    await processFolder(file); // 递归处理子文件夹
+                }
+            }
+        };
+
+        await processFolder(rootFolder);
+        return { novelCount, shortStoryCount };
+    }
+
+    // 辅助方法，从信息.md的内容中提取type
+    getFileType(content: string): 'novel' | 'short-story' | null {
+        const match = content.match(/type: (novel|short-story)/);
+        return match ? match[1] as 'novel' | 'short-story' : null;
     }
 
     displayItems(container: HTMLElement, folder: TFolder) {

@@ -45,7 +45,6 @@ export class BookshelfView extends ItemView {
     }
 
     async refresh() {
-        console.log('刷新视图中，，，，');
         this.bookListContainer.empty(); // 仅清空书籍列表容器
 
         const rootFolder = "/";
@@ -56,7 +55,6 @@ export class BookshelfView extends ItemView {
     }
 
     async displayBooks(container: HTMLElement, rootFolder: TFolder) {
-        console.log('显示书籍...');
         const bookFolders = rootFolder.children.filter(child => child instanceof TFolder) as TFolder[];
         
         for (const folder of bookFolders) {
@@ -80,7 +78,6 @@ export class BookshelfView extends ItemView {
     }
 
     displayBook(container: HTMLElement, folder: TFolder, type: string, totalWordCount: number) {
-        console.log(`展示图书: ${folder.name}`);
         const bookItem = container.createDiv({ cls: 'book-item' });
         bookItem.createEl('div', { cls: 'book-title', text: `${folder.name}` });
         bookItem.createEl('div', { cls: 'book-count', text: `${totalWordCount} 字` });

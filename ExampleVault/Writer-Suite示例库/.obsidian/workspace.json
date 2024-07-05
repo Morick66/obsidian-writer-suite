@@ -1,0 +1,189 @@
+{
+  "main": {
+    "id": "5b60aa19007ef85d",
+    "type": "split",
+    "children": [
+      {
+        "id": "9a00b0fe2633c7a5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8646cae11cdc4d36",
+            "type": "leaf",
+            "state": {
+              "type": "bookshelf-view",
+              "state": {}
+            }
+          },
+          {
+            "id": "9b272933808fca3e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "长篇小说1/小说文稿/第1卷/第2章.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              }
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "96126693d414b60b",
+    "type": "split",
+    "children": [
+      {
+        "id": "a1d25f9a87b488e6",
+        "type": "tabs",
+        "dimension": 62.28513650151668,
+        "children": [
+          {
+            "id": "64b5c54b663de7b7",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "4e5dbfc3ca789e34",
+            "type": "leaf",
+            "state": {
+              "type": "file-list-view",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 1
+      },
+      {
+        "id": "a66edc443ecedb80",
+        "type": "tabs",
+        "dimension": 37.71486349848331,
+        "children": [
+          {
+            "id": "cb5053aae493a06f",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "选择器",
+                "matchingCase": true,
+                "explainSearch": false,
+                "collapseAll": true,
+                "extraContext": true,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 217.5
+  },
+  "right": {
+    "id": "fb296b32c27524ad",
+    "type": "split",
+    "children": [
+      {
+        "id": "45eb2d15b7f78c99",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "b74619744e1cb540",
+            "type": "leaf",
+            "state": {
+              "type": "book-setting",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 624.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "homepage:Open homepage": false,
+      "canvas:新建白板": false,
+      "templates:插入模板": false,
+      "switcher:打开快速切换": false,
+      "workspaces:管理工作区布局": true,
+      "command-palette:打开命令面板": false,
+      "graph:查看关系图谱": false,
+      "copilot_kimi:Copilot Chat": true,
+      "writer-suite:设定": false,
+      "writer-suite:书架": false,
+      "writer-suite:目录": false
+    }
+  },
+  "active": "9b272933808fca3e",
+  "lastOpenFiles": [
+    "长篇小说1/设定/大纲/总纲/大纲.md",
+    "长篇小说1/小说文稿/第2卷/第3章.md",
+    "长篇小说1/小说文稿/第1卷/第2章.md",
+    "长篇小说1/设定/大纲/章纲/第二章.md",
+    "长篇小说1/设定/大纲/章纲/第一章.md",
+    "长篇小说1/设定/大纲/章纲",
+    "长篇小说1/设定/大纲/总纲",
+    "长篇小说1/设定/大纲",
+    "长篇小说1/设定",
+    "长篇小说1/小说文稿/第1卷/第1章 .md",
+    "长篇小说1/小说文稿/第2卷",
+    "长篇小说1/小说文稿/楔子.md",
+    "长篇小说1/小说文稿/第1卷",
+    "短篇小说2/小说正文.md",
+    "短篇小说2/大纲.md",
+    "短篇小说3/小说正文.md",
+    "短篇小说3/信息.md",
+    "短篇小说3",
+    "短篇小说2/信息.md",
+    "短篇小说2",
+    "短篇小说1/小说正文.md",
+    "短篇小说1/信息.md",
+    "短篇小说1",
+    "长篇小说2/小说文稿/未命名章节.md",
+    "长篇小说2/小说文稿",
+    "长篇小说2/信息.md",
+    "长篇小说1/信息.md",
+    "@附件/灵感/全局灵感2.md",
+    "@附件/灵感/全局灵感1.md",
+    "欢迎.md",
+    "短篇小说测试/小说正文.md",
+    "长篇小说测试/小说文稿/未命名章节.md",
+    "短篇小说测试/大纲.md",
+    "短篇小说测试/信息.md",
+    "长篇小说测试/设定/角色/主角团/林凯.md",
+    "长篇小说测试/设定/大纲/总纲/你好.md",
+    "@附件/图片/Morick.jpg",
+    "叠龟宇宙/cover.jpg",
+    "未命名.canvas",
+    "门外有人/设定/角色/人物关系.canvas",
+    "跟自己聊天/设定/角色/人物关系.canvas",
+    "影子调查员/设定/角色/人物关系.canvas",
+    "content/post/2024/05/20240506172253/2420240506170559.png",
+    "content/post/2024/05/20240506172253/random.svg",
+    "content/post/2024/05/20240516085858/Anytype.svg",
+    "content/page/links/CodeKid.jpg",
+    "public/links/CodeKid.jpg",
+    "public/about/UFO.jpg",
+    "public/categories/诗歌小说/novel.svg",
+    "public/categories/经验分享/experience.svg",
+    "@Extras/未命名.canvas",
+    "02-Areas/研究生/研究笔记/@研究笔记.canvas",
+    "02-Areas/研究生/研究笔记/量子启发式算法.canvas",
+    "Home.canvas",
+    "02-Areas/01-研究笔记/量子启发式算法.canvas",
+    "02-Areas/01-研究笔记/@研究笔记.canvas"
+  ]
+}

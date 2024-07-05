@@ -1,0 +1,13 @@
+{
+  "types": {
+    "aliases": "aliases",
+    "cssclasses": "multitext",
+    "tags": "tags",
+    "平台": "multitext",
+    "记录时间": "date",
+    "讨厌的生物群落": "multitext",
+    "喜欢的生物群落": "multitext",
+    "喜欢的 NPC": "multitext",
+    "讨厌的 NPC": "multitext"
+  }
+}

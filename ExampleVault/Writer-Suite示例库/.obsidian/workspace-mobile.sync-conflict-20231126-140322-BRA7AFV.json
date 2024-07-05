@@ -1,0 +1,75 @@
+{
+  "main": {
+    "id": "5b60aa19007ef85d",
+    "type": "split",
+    "children": [
+      {
+        "id": "3c367ffc64d4b756",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1689c571d27f1273",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "obsidian/Home.md",
+                "mode": "preview",
+                "backlinks": false,
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "351212192ae44531",
+    "type": "mobile-drawer",
+    "children": [],
+    "currentTab": 0
+  },
+  "right": {
+    "id": "d8ca51b1171e53a9",
+    "type": "mobile-drawer",
+    "children": [],
+    "currentTab": 0
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "templater-obsidian:Templater": true,
+      "homepage:Open homepage": false,
+      "obsidian-custom-frames:Open 欧路词典": false,
+      "obsidian-excalidraw-plugin:新建 Excalidraw 绘图": false,
+      "canvas:新建白板": false,
+      "templates:插入模板": false,
+      "switcher:打开快速切换": false,
+      "workspaces:管理工作区布局": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
+      "cmdr:Workspaces Plus: Load: 科研": false,
+      "cmdr:Workspaces Plus: Load: 编程": false,
+      "command-palette:打开命令面板": true,
+      "remotely-save:Remotely Save": true,
+      "graph:查看关系图谱": false,
+      "daily-notes:打开/创建今天的日记": true,
+      "cmdr:Workspaces Plus: Load: 写作": false,
+      "cmdr:Workspaces Plus: Load: 英语": false,
+      "cmdr:Workspaces Plus: Load: 阅读": false
+    }
+  },
+  "active": "1689c571d27f1273",
+  "lastOpenFiles": [
+    "日记/2022-02-16.md",
+    "编程/markdown语法.md",
+    "markdown语法.md",
+    "日记/2021-01-19.md",
+    "日记/2022-03-02.md",
+    "日记/2022-03-03.md",
+    "日记/2022-03-27.md",
+    "日记/2022-04-25.md",
+    "日记/2022-05-04.md",
+    "日记/2021-09-13.md"
+  ]
+}

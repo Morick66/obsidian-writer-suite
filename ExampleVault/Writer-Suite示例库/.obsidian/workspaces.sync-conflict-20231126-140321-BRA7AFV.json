@@ -1,0 +1,204 @@
+{
+  "workspaces": {
+    "主页": {
+      "main": {
+        "id": "5b60aa19007ef85d",
+        "type": "split",
+        "children": [
+          {
+            "id": "78e1e916943c43d3",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "e21380246796464b",
+                "type": "leaf",
+                "state": {
+                  "type": "markdown",
+                  "state": {
+                    "file": "02-Index/🏠Home.md",
+                    "mode": "preview",
+                    "backlinks": false,
+                    "source": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical"
+      },
+      "left": {
+        "id": "96126693d414b60b",
+        "type": "split",
+        "children": [
+          {
+            "id": "a1d25f9a87b488e6",
+            "type": "tabs",
+            "dimension": 65,
+            "children": [
+              {
+                "id": "64b5c54b663de7b7",
+                "type": "leaf",
+                "state": {
+                  "type": "file-explorer",
+                  "state": {
+                    "sortOrder": "alphabetical"
+                  }
+                }
+              },
+              {
+                "id": "cb5053aae493a06f",
+                "type": "leaf",
+                "state": {
+                  "type": "search",
+                  "state": {
+                    "query": "tag:#插件",
+                    "matchingCase": true,
+                    "explainSearch": false,
+                    "collapseAll": true,
+                    "extraContext": true,
+                    "sortOrder": "alphabetical"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "40b2cd084788a39a",
+            "type": "tabs",
+            "dimension": 35,
+            "children": [
+              {
+                "id": "cdb507b53df44574",
+                "type": "leaf",
+                "state": {
+                  "type": "tag",
+                  "state": {
+                    "sortOrder": "frequency",
+                    "useHierarchy": true
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "horizontal",
+        "width": 329.5
+      },
+      "right": {
+        "id": "fb296b32c27524ad",
+        "type": "split",
+        "children": [
+          {
+            "id": "485cdb48ee4b7ef5",
+            "type": "tabs",
+            "dimension": 63.07692307692307,
+            "children": [
+              {
+                "id": "4ccaf6b9d8e7bbf9",
+                "type": "leaf",
+                "state": {
+                  "type": "outline",
+                  "state": {
+                    "file": "02-Index/🏠Home.md"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "id": "25be4a8a260fa456",
+            "type": "tabs",
+            "dimension": 36.92307692307693,
+            "children": [
+              {
+                "id": "865734b58d14fa1d",
+                "type": "leaf",
+                "state": {
+                  "type": "localgraph",
+                  "state": {
+                    "file": "02-Index/🏠Home.md",
+                    "options": {
+                      "collapse-filter": true,
+                      "search": "",
+                      "localJumps": 1,
+                      "localBacklinks": true,
+                      "localForelinks": true,
+                      "localInterlinks": false,
+                      "showTags": false,
+                      "showAttachments": false,
+                      "hideUnresolved": false,
+                      "collapse-color-groups": true,
+                      "colorGroups": [],
+                      "collapse-display": true,
+                      "showArrow": false,
+                      "textFadeMultiplier": 0,
+                      "nodeSizeMultiplier": 1,
+                      "lineSizeMultiplier": 1,
+                      "collapse-forces": true,
+                      "centerStrength": 0.518713248970312,
+                      "repelStrength": 10,
+                      "linkStrength": 1,
+                      "linkDistance": 250,
+                      "scale": 0.5087618855792587,
+                      "close": true
+                    }
+                  }
+                }
+              },
+              {
+                "id": "d645248d48f913e1",
+                "type": "leaf",
+                "state": {
+                  "type": "backlink",
+                  "state": {
+                    "file": "02-Index/🏠Home.md",
+                    "collapseAll": false,
+                    "extraContext": false,
+                    "sortOrder": "alphabetical",
+                    "showSearch": false,
+                    "searchQuery": "",
+                    "backlinkCollapsed": false,
+                    "unlinkedCollapsed": true
+                  }
+                }
+              },
+              {
+                "id": "7a5aa37298515d78",
+                "type": "leaf",
+                "state": {
+                  "type": "outgoing-link",
+                  "state": {
+                    "file": "02-Index/🏠Home.md",
+                    "linksCollapsed": false,
+                    "unlinkedCollapsed": false
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "horizontal",
+        "width": 384.5
+      },
+      "left-ribbon": {
+        "hiddenItems": {
+          "homepage:Open homepage": false,
+          "obsidian-excalidraw-plugin:新建绘图文件": false,
+          "oz-clear-unused-images:Clear Unused Images": false,
+          "canvas:新建白板": false,
+          "templates:插入模板": false,
+          "switcher:打开快速切换": false,
+          "workspaces:管理工作区布局": false,
+          "command-palette:打开命令面板": false,
+          "graph:查看关系图谱": false,
+          "random-note:开始漫游笔记": false,
+          "remotely-save:Remotely Save": false,
+          "obsidian-custom-frames:Open Writeathon": false
+        }
+      },
+      "active": "4ccaf6b9d8e7bbf9"
+    }
+  },
+  "active": "主页"
+}

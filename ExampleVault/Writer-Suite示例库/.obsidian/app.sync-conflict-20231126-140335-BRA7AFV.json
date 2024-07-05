@@ -1,0 +1,29 @@
+{
+  "promptDelete": false,
+  "strictLineBreaks": false,
+  "alwaysUpdateLinks": true,
+  "readableLineLength": true,
+  "defaultViewMode": "source",
+  "attachmentFolderPath": "01-Extra/Images",
+  "foldHeading": true,
+  "showInlineTitle": true,
+  "newFileLocation": "folder",
+  "userIgnoreFilters": null,
+  "livePreview": true,
+  "newFileFolderPath": "@Inbox",
+  "showUnsupportedFiles": true,
+  "newLinkFormat": "shortest",
+  "spellcheck": true,
+  "pdfExportSettings": {
+    "includeName": true,
+    "pageSize": "A5",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 60
+  },
+  "trashOption": "system",
+  "showFrontmatter": false,
+  "showLineNumber": false,
+  "tabSize": 4,
+  "useMarkdownLinks": false
+}

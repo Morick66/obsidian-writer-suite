@@ -1,0 +1,42 @@
+{
+  "promptDelete": false,
+  "strictLineBreaks": false,
+  "alwaysUpdateLinks": true,
+  "readableLineLength": true,
+  "defaultViewMode": "source",
+  "attachmentFolderPath": "@附件/图片",
+  "foldHeading": true,
+  "showInlineTitle": true,
+  "newFileLocation": "root",
+  "userIgnoreFilters": [
+    "archetypes/",
+    "assets/",
+    "data/",
+    "i18n/",
+    "layouts/",
+    "public/",
+    "resources/",
+    "static/",
+    "themes/"
+  ],
+  "livePreview": true,
+  "newFileFolderPath": "@Inbox",
+  "showUnsupportedFiles": true,
+  "newLinkFormat": "relative",
+  "spellcheck": true,
+  "pdfExportSettings": {
+    "includeName": true,
+    "pageSize": "A4",
+    "landscape": false,
+    "margin": "2",
+    "downscalePercent": 100
+  },
+  "trashOption": "local",
+  "showFrontmatter": false,
+  "showLineNumber": false,
+  "tabSize": 4,
+  "useMarkdownLinks": false,
+  "mobilePullAction": "obsidian-linter:lint-file",
+  "propertiesInDocument": "visible",
+  "showRibbon": true
+}

@@ -1,0 +1,123 @@
+{
+  "workspaces": {
+    "主页": {
+      "main": {
+        "id": "5b60aa19007ef85d",
+        "type": "split",
+        "children": [
+          {
+            "id": "9a00b0fe2633c7a5",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "8646cae11cdc4d36",
+                "type": "leaf",
+                "state": {
+                  "type": "bookshelf-view",
+                  "state": {}
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "vertical"
+      },
+      "left": {
+        "id": "96126693d414b60b",
+        "type": "split",
+        "children": [
+          {
+            "id": "a1d25f9a87b488e6",
+            "type": "tabs",
+            "dimension": 62.28513650151668,
+            "children": [
+              {
+                "id": "64b5c54b663de7b7",
+                "type": "leaf",
+                "state": {
+                  "type": "file-explorer",
+                  "state": {
+                    "sortOrder": "alphabetical"
+                  }
+                }
+              },
+              {
+                "id": "4e5dbfc3ca789e34",
+                "type": "leaf",
+                "state": {
+                  "type": "file-list-view",
+                  "state": {}
+                }
+              }
+            ],
+            "currentTab": 1
+          },
+          {
+            "id": "a66edc443ecedb80",
+            "type": "tabs",
+            "dimension": 37.71486349848331,
+            "children": [
+              {
+                "id": "cb5053aae493a06f",
+                "type": "leaf",
+                "state": {
+                  "type": "search",
+                  "state": {
+                    "query": "选择器",
+                    "matchingCase": true,
+                    "explainSearch": false,
+                    "collapseAll": true,
+                    "extraContext": true,
+                    "sortOrder": "alphabetical"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "horizontal",
+        "width": 217.5
+      },
+      "right": {
+        "id": "fb296b32c27524ad",
+        "type": "split",
+        "children": [
+          {
+            "id": "45eb2d15b7f78c99",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "b74619744e1cb540",
+                "type": "leaf",
+                "state": {
+                  "type": "book-setting",
+                  "state": {}
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "horizontal",
+        "width": 624.5
+      },
+      "left-ribbon": {
+        "hiddenItems": {
+          "homepage:Open homepage": false,
+          "canvas:新建白板": false,
+          "templates:插入模板": false,
+          "switcher:打开快速切换": false,
+          "workspaces:管理工作区布局": true,
+          "command-palette:打开命令面板": false,
+          "graph:查看关系图谱": false,
+          "copilot_kimi:Copilot Chat": true,
+          "writer-suite:设定": false,
+          "writer-suite:书架": false,
+          "writer-suite:目录": false
+        }
+      },
+      "active": "8646cae11cdc4d36",
+      "mtime": "2024-07-01T10:26:44+08:00"
+    }
+  },
+  "active": "主页"
+}

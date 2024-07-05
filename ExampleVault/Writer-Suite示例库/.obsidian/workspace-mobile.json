@@ -1,0 +1,175 @@
+{
+  "main": {
+    "id": "5b60aa19007ef85d",
+    "type": "split",
+    "children": [
+      {
+        "id": "78e1e916943c43d3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e21380246796464b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "02-Index/🏠Home.md",
+                "mode": "preview",
+                "backlinks": false,
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ba6020d0746d6b39",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "cf52295c9c67a8f7",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical"
+          }
+        }
+      },
+      {
+        "id": "e22196b75f1d46bb",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true
+          }
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "right": {
+    "id": "29e3b7e635b67de8",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "d92c6f04cfecfeca",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "02-Index/🏠Home.md"
+          }
+        }
+      },
+      {
+        "id": "ed27d47c9ec4373a",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "file": "02-Index/🏠Home.md",
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          }
+        }
+      },
+      {
+        "id": "e6a52c865242b706",
+        "type": "leaf",
+        "state": {
+          "type": "outgoing-link",
+          "state": {
+            "file": "02-Index/🏠Home.md",
+            "linksCollapsed": false,
+            "unlinkedCollapsed": true
+          }
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "homepage:Open homepage": false,
+      "obsidian-excalidraw-plugin:新建绘图文件": true,
+      "canvas:新建白板": true,
+      "templates:插入模板": false,
+      "switcher:打开快速切换": true,
+      "workspaces:管理工作区布局": true,
+      "command-palette:打开命令面板": false,
+      "graph:查看关系图谱": false,
+      "random-note:开始漫游笔记": false,
+      "remotely-save:Remotely Save": false
+    }
+  },
+  "active": "cf52295c9c67a8f7",
+  "lastOpenFiles": [
+    "03-MyNotes/玩转Vim从放弃到入门.md",
+    "02-Index/🛠Tools&Skills.md",
+    "03-MyNotes/📱Hardware.md",
+    "02-Index/🏠Home.md",
+    "02-Index/💾Software.md",
+    "04-Project/研究生/开题.md",
+    "03-MyNotes/PyQt5.md",
+    "03-MyNotes/记账软件配置.md",
+    "04-Project/研究生/优点.md",
+    "03-MyNotes/v2rayA.md",
+    "04-Project/研究生/小论文.md",
+    "04-Project/想法/写作软件.md",
+    "04-Project/研究生/大论文.md",
+    "04-Project/想法/个人博客.md",
+    "03-MyNotes/Mermaid.md",
+    "03-MyNotes/Loss 函数.md",
+    "04-Project/研究生/研究路线.md",
+    "04-Project/研究生/联合仿真.md",
+    "04-Project/研究生/行程控制.md",
+    "04-Project/研究生/模型验证.md",
+    "04-Project/研究生/故障报警.md",
+    "04-Project/研究生/数学模型.md",
+    "04-Project/研究生/恢复系数.md",
+    "04-Project/研究生/分段分析.md",
+    "04-Project/Xtab/小组件.md",
+    "04-Project/研究生/整理后数据.md",
+    "04-Project/研究生/电科院项目.canvas",
+    "04-Project/Xtab/Xtab.canvas",
+    "04-Project/LifeGo/LifeGo.canvas",
+    "04-Project/研究生/Postgraduate.canvas",
+    "04-Project/想法",
+    "04-Project/研究生",
+    "04-Project/@归档",
+    "04-Project/Xtab",
+    "04-Project/LifeGo",
+    "04-Project",
+    "05-Project/LifeGo/LifeGo.canvas",
+    "01-Extra/Images/Banner/moon.jpg",
+    "05-Project/Xtab/Xtab.canvas",
+    "05-Project/研究生/Postgraduate.canvas",
+    "01-Extra/Images/Pasted image 20231109111818.png",
+    "01-Extra/Images/Pasted image 20231108212059.png",
+    "01-Extra/Images/Pasted image 20231109105221.png",
+    "01-Extra/Images/Pasted image 20231108185605.png",
+    "01-Extra/Images/Pasted image 20231108200426.png",
+    "01-Extra/Images/Pasted image 20231108185057.png",
+    "01-Extra/Images/Pasted image 20231105215437.png",
+    "01-Extra/Images/Pasted image 20231108185247.png",
+    "01-Extra/Images/Pasted image 20231105215151.png",
+    "05-Project/想法",
+    "05-Project/Xtab",
+    "05-Project/研究生/研究生白板.canvas",
+    "05-Project/研究生/电科院项目.canvas",
+    "01-Extra/Images/theme.css",
+    "01-Extra/Images/Banner",
+    "04-Spaces/Writing/血翼浮屠/人物设定/@人物设定.canvas"
+  ]
+}

@@ -194,7 +194,7 @@ If your plugin does not need CSS, delete this file.
 }
 .inspiration-item {
     position: relative;
-    background-color: var(--tab-container-background);
+    background-color: var(--background-primary);
     box-sizing: border-box;
     padding: 10px 15px;
     margin: 0 20px 20px 20px;

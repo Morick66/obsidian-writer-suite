@@ -5,10 +5,8 @@ import { BookSettingView, VIEW_TYPE_BOOK_SETTING } from './view/bookSettingView'
 
 // 插件设置的接口
 interface MyPluginSettings {
-    // 姓名
     name: string;
     picturePath: string; // 新增图片路径设置项
-    // 是否计算标点符号
     countPunctuation: boolean;
 }
 
@@ -34,29 +32,27 @@ class MyPluginSettingTab extends PluginSettingTab {
         containerEl.empty();
 
         containerEl.createEl('h2', { text: '插件设置' });
+
         new Setting(containerEl)
-        .setName('姓名')
-        .addText(text => {
-            text.setValue(this.plugin.settings.name).onChange(async (value) => {
-                this.plugin.settings.name = value;
-                await this.plugin.saveSettings();
-                this.plugin.refreshTocView(); 
+            .setName('姓名')
+            .addText(text => {
+                text.setValue(this.plugin.settings.name).onChange(async (value) => {
+                    this.plugin.settings.name = value;
+                    await this.plugin.saveSettings();
+                    this.plugin.refreshTocView();
+                });
             });
-        });
 
-        // 添加标点符号计数设置
-        // ... 现有代码 ...
-
-        // 添加图片路径输入（假设是相对路径或URL）
         new Setting(containerEl)
             .setName('头像图片路径')
             .addText(text => {
                 text.setValue(this.plugin.settings.picturePath).onChange(async (value) => {
                     this.plugin.settings.picturePath = value;
                     await this.plugin.saveSettings();
-                    this.plugin.refreshTocView(); 
+                    this.plugin.refreshTocView();
                 });
             });
+
         new Setting(containerEl)
             .setName('标点符号计数')
             .setDesc('标点符号计算为一个字符')
@@ -65,7 +61,6 @@ class MyPluginSettingTab extends PluginSettingTab {
                 .onChange(async (value) => {
                     this.plugin.settings.countPunctuation = value;
                     await this.plugin.saveSettings();
-                    // 设置更改时刷新视图
                     const view = this.app.workspace.getLeavesOfType(VIEW_TYPE_FILE_LIST)[0]?.view;
                     if (view instanceof TocView) {
                         view.refresh();
@@ -77,22 +72,19 @@ class MyPluginSettingTab extends PluginSettingTab {
 // 主插件类
 export default class MyPlugin extends Plugin {
     settings: MyPluginSettings;
-    folderPath: string; // 新增 folderPath
+    folderPath: string;
 
     async onload() {
         await this.loadSettings();
 
-        // 添加具有所需图标名称的新功能区图标
         this.addRibbonIcon('folder-open', '目录', () => {
             this.activateView(VIEW_TYPE_FILE_LIST);
         });
 
-        // 添加激活书架视图的功能区图标
         this.addRibbonIcon('book', '书架', () => {
             this.activateView(VIEW_TYPE_BOOKSHELF);
         });
 
-        // 添加激活书架视图的功能区图标
         this.addRibbonIcon('book-text', '设定', () => {
             this.activateView(VIEW_TYPE_BOOK_SETTING);
         });
@@ -118,7 +110,7 @@ export default class MyPlugin extends Plugin {
         this.registerEvent(this.app.vault.on('create', this.handleFileChange.bind(this)));
         this.registerEvent(this.app.vault.on('delete', this.handleFileChange.bind(this)));
 
-        this.folderPath = ''; // 初始化 folderPath
+        this.folderPath = '';
     }
 
     handleFileChange(file: TFile) {
@@ -173,6 +165,7 @@ export default class MyPlugin extends Plugin {
             tocView.refresh();
         }
     }
+
     refreshBookSettingView() {
         const bookSettingView = this.app.workspace.getLeavesOfType(VIEW_TYPE_BOOK_SETTING)[0]?.view as BookSettingView;
         if (bookSettingView) {

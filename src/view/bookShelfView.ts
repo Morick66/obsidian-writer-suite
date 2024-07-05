@@ -1,7 +1,7 @@
 import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, parseYaml, ButtonComponent, TextComponent, Modal, App, setIcon } from 'obsidian';
 import MyPlugin from '../main';
 import { WordCounter } from '../helper/WordCount';
-import { ConfirmDeleteModal } from 'helper/Modal';
+import { ConfirmDeleteModal } from '../model/Modal';
 
 export const VIEW_TYPE_BOOKSHELF = 'bookshelf-view';
 
@@ -61,7 +61,8 @@ export class BookshelfView extends ItemView {
             const infoFile = folder.children.find(file => file instanceof TFile && file.name === '信息.md') as TFile;
             if (infoFile) {
                 const fileContents = await this.app.vault.read(infoFile);
-                const fileYaml = parseYaml(fileContents);
+                const yamlHeader = fileContents.split('---')[1].trim();
+                const fileYaml = parseYaml(yamlHeader);
                 const novelFolder = folder.children.find(file => file instanceof TFolder && file.name === '小说文稿') as TFolder;
                 const storyFile = folder.children.find(file => file instanceof TFile && file.name === '小说正文.md') as TFile;
                 if (novelFolder) {
@@ -222,7 +223,7 @@ class NewBookModal extends Modal {
                 const bookFolderPath = `${this.folder.path}/${bookName}`;
                 const newFolder = await this.app.vault.createFolder(bookFolderPath);
                 if (newFolder) {
-                    await this.app.vault.create(newFolder.path + '/信息.md', `名称: ${bookName}\n类型: ${bookType}\n简介: ${bookDesc}`);
+                    await this.app.vault.create(newFolder.path + '/信息.md', `---\ntype: ${bookType}\n---\n名称: ${bookName}\n简介: ${bookDesc}`);
                     if (bookType === 'novel') {
                         const novelFolder = await this.app.vault.createFolder(newFolder.path + '/小说文稿');
                         await this.app.vault.create(novelFolder.path + '/未命名章节.md', ''); // 创建空章节

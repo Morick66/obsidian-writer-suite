@@ -1,7 +1,7 @@
 // book-setting-view.ts
 import { ItemView, WorkspaceLeaf, TFolder, TFile, setIcon, Modal, App, TextComponent, ButtonComponent, Notice } from 'obsidian';
 import MyPlugin from '../main';
-import { ConfirmDeleteModal } from 'helper/Modal';
+import { ConfirmDeleteModal } from '../model/Modal';
 
 export const VIEW_TYPE_BOOK_SETTING = 'book-setting';
 

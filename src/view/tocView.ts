@@ -1,7 +1,7 @@
 import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, Modal, TextComponent, ButtonComponent, App, setIcon, MarkdownView} from 'obsidian';
 import MyPlugin from '../main';
 import { WordCounter } from '../helper/WordCount';
-import { ConfirmDeleteModal } from 'helper/Modal';
+import { ConfirmDeleteModal } from '../model/Modal';
 
 export const VIEW_TYPE_FILE_LIST = 'file-list-view';
 export const NEW_ITEM_MODAL = 'new-item-modal';
@@ -92,14 +92,22 @@ export class TocView extends ItemView {
     displayInfo(container: HTMLElement) {
         const { settings } = this.plugin;
         const infoContainer = container.createDiv({ cls: 'info-container' });
+    
+        // 调试输出图片路径
+        console.log('图片路径:', settings.picturePath);
+    
         // 如果用户设置了图片路径，展示图片
         if (settings.picturePath) {
+            // 确保路径以 "app://local/" 开头
+            const imagePath = `${settings.picturePath}`;
             infoContainer.createEl('img', {
-                attr: { src: settings.picturePath },
+                attr: { alt: imagePath, src: imagePath },
                 cls: 'user-avatar'
             });
         }
+    
         infoContainer.createEl('h1', { text: settings.name, cls: 'user-name' });
+    
         this.getBookCountAndTotalWords().then(({ novelCount, shortStoryCount }) => {
             // 格式化显示文本
             const novelText = novelCount > 0 ? `${novelCount}` : "0";
@@ -114,6 +122,7 @@ export class TocView extends ItemView {
             infoContainer.createDiv({ text: infoText, cls: 'book-info' });
         });
     }
+       
 
     // 异步方法，用于获取书籍数量和总字数
     async getBookCountAndTotalWords(): Promise<{ novelCount: number; shortStoryCount: number }> {

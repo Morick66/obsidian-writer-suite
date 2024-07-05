@@ -1,7 +1,8 @@
 // book-setting-view.ts
-import { ItemView, WorkspaceLeaf, TFolder, TFile, setIcon, Modal, App, TextComponent, ButtonComponent, Notice } from 'obsidian';
+import { ItemView, WorkspaceLeaf, TFolder, TFile, setIcon, Notice } from 'obsidian';
 import MyPlugin from '../main';
-import { ConfirmDeleteModal } from '../model/Modal';
+import { ConfirmDeleteModal } from '../model/deleteModal';
+import { NewInspirationModal } from 'src/model/InspirationModal';
 
 export const VIEW_TYPE_BOOK_SETTING = 'book-setting';
 
@@ -92,7 +93,7 @@ export class BookSettingView extends ItemView {
         const folder = this.app.vault.getAbstractFileByPath(inspirationPath);
         // 添加类型守卫来检查 folder 是否为 TFolder 类型
         if (folder && folder instanceof TFolder) {
-            const modal = new NewInspirationModal(this.app, folder, this);
+            const modal = new NewInspirationModal(this.app, folder, this, this.refresh);
             modal.open();
         } else {
             new Notice('文件夹未找到');
@@ -144,50 +145,3 @@ export class BookSettingView extends ItemView {
     }
 }
 
-// 新建章节的模态框
-export class NewInspirationModal extends Modal {
-    folder: TFolder;
-    view: BookSettingView;
-
-    constructor(app: App, folder: TFolder, view: BookSettingView) {
-        super(app);
-        this.folder = folder;
-        this.view = view;
-    }
-
-    onOpen() {
-        const { contentEl } = this;
-        contentEl.createEl('h2', { cls: 'pluginModal', text: '添加灵感' });
-
-        const input = new TextComponent(contentEl);
-        input.setPlaceholder('灵感标题');
-
-        const descInputEl = contentEl.createEl('textarea', { cls: 'inspiration-textarea' });
-        descInputEl.placeholder = '灵感详细内容';
-        descInputEl.rows = 10;
-        descInputEl.style.width = '100%';
-
-        new ButtonComponent(contentEl)
-            .setButtonText('创建')
-            .setCta()
-            .onClick(async () => {
-                const fileName = input.getValue();
-                const fileContent = descInputEl.value;
-                if (!fileName) {
-                    new Notice('灵感标题不能为空');
-                    return;
-                }
-                
-                const filePath = `${this.folder.path}/${fileName}.md`;
-                console.log(this.folder);
-                console.log(filePath);
-                await this.app.vault.create(filePath, fileContent);
-                this.close();
-            });
-    }
-
-    onClose() {
-        const { contentEl } = this;
-        contentEl.empty();
-    }
-}

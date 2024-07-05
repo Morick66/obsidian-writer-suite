@@ -1,7 +1,9 @@
-import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, Modal, TextComponent, ButtonComponent, App, setIcon, MarkdownView} from 'obsidian';
+import { ItemView, WorkspaceLeaf, TFolder, TFile, Notice, setIcon, MarkdownView} from 'obsidian';
 import MyPlugin from '../main';
 import { WordCounter } from '../helper/WordCount';
-import { ConfirmDeleteModal } from '../model/Modal';
+import { ConfirmDeleteModal } from '../model/deleteModal';
+import { NewChapterModal } from 'src/model/newChapterModal';
+import { NewItemModal } from 'src/model/newItemModal';
 
 export const VIEW_TYPE_FILE_LIST = 'file-list-view';
 export const NEW_ITEM_MODAL = 'new-item-modal';
@@ -359,7 +361,7 @@ export class TocView extends ItemView {
     }
 
     async showNewChapterModal(folder: TFolder) {
-        const modal = new NewChapterModal(this.app, folder, this);
+        const modal = new NewChapterModal(this.app, folder, this, this.refresh);
         modal.open();
     }
 
@@ -367,7 +369,7 @@ export class TocView extends ItemView {
         const rootFolderPath = this.plugin.folderPath + '/小说文稿';
         const folder = this.app.vault.getAbstractFileByPath(rootFolderPath);
         if (folder && folder instanceof TFolder) {
-            const modal = new NewItemModal(this.app, folder, this);
+            const modal = new NewItemModal(this.app, folder, this, this.refresh);
             modal.open();
         } else {
             new Notice(`文件夹未发现: ${rootFolderPath}`);
@@ -381,97 +383,5 @@ export class TocView extends ItemView {
 
     async onClose() {
         // Clean up when view is closed, if necessary
-    }
-}
-
-// 新建章节的模态框
-export class NewChapterModal extends Modal {
-    folder: TFolder;
-    view: TocView;
-
-    constructor(app: App, folder: TFolder, view: TocView) {
-        super(app);
-        this.folder = folder;
-        this.view = view;
-    }
-
-    onOpen() {
-        const { contentEl } = this;
-        contentEl.createEl('h2', { cls: 'pluginModal', text: '新建章节' });
-
-        const input = new TextComponent(contentEl);
-        input.setPlaceholder('章节名称');
-
-        new ButtonComponent(contentEl)
-            .setButtonText('创建')
-            .setCta()
-            .onClick(async () => {
-                const fileName = input.getValue();
-                if (!fileName) {
-                    new Notice('章节名称不能为空');
-                    return;
-                }
-
-                const filePath = `${this.folder.path}/${fileName}.md`;
-                await this.app.vault.create(filePath, '');
-                this.close();
-                this.view.refresh();
-            });
-    }
-
-    onClose() {
-        const { contentEl } = this;
-        contentEl.empty();
-    }
-}
-
-// 新建条目模态框
-export class NewItemModal extends Modal {
-    folder: TFolder;
-    view: TocView;
-
-    constructor(app: App, folder: TFolder, view: TocView) {
-        super(app);
-        this.folder = folder;
-        this.view = view;
-    }
-
-    onOpen() {
-        const { contentEl } = this;
-        contentEl.empty();
-        contentEl.createEl('p', { text: '新建卷/章节', cls: 'modal-title' });
-
-        const nameInput = new TextComponent(contentEl);
-        nameInput.setPlaceholder('输入卷/章节名称...');
-
-        const createFolderButton = new ButtonComponent(contentEl);
-        createFolderButton.setButtonText('新卷')
-            .onClick(async () => {
-                const name = nameInput.getValue();
-                if (name) {
-                    await this.app.vault.createFolder(`${this.folder.path}/${name}`);
-                    new Notice(`Folder '${name}' created.`);
-                    this.view.refresh();
-                    this.close();
-                }
-            });
-
-        const createFileButton = new ButtonComponent(contentEl);
-        createFileButton.setButtonText('新章节')
-            .onClick(async () => {
-                const name = nameInput.getValue();
-                if (name) {
-                    const filePath = `${this.folder.path}/${name}.md`;
-                    await this.app.vault.create(filePath, '');
-                    new Notice(`File '${name}.md' created.`);
-                    this.view.refresh();
-                    this.close();
-                }
-            });
-    }
-
-    onClose() {
-        const { contentEl } = this;
-        contentEl.empty();
     }
 }

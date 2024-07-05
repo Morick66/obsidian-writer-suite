@@ -5,6 +5,7 @@ obsidian小说创作插件
 > 1. 插件目前还存在一些小bug，但是基本使用并无大碍
 > 2. 插件目前只有中文，后续可能会支持英文
 > 3. 诸如文件夹结构暂时无法自定义，目前只能使用我设定的这种文件夹结构
+> 4. 需要单独创建一个obsidian仓库使用
 
 ## 特色
 
@@ -81,3 +82,9 @@ obsidian小说创作插件
 ### 长篇小说
 
 ![alt text](images/image-2.png)
+
+## 使用
+
+直接下载[Writer-Suite示例库](https://github.com/Morick66/obsidian-writer-suite/tree/main/ExampleVault)
+
+或者从`Releases`下载添加到obsidian的插件文件夹中即可。

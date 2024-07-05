@@ -95,12 +95,8 @@ export class TocView extends ItemView {
         const { settings } = this.plugin;
         const infoContainer = container.createDiv({ cls: 'info-container' });
     
-        // 调试输出图片路径
-        console.log('图片路径:', settings.picturePath);
-    
         // 如果用户设置了图片路径，展示图片
         if (settings.picturePath) {
-            // 确保路径以 "app://local/" 开头
             const imagePath = `${settings.picturePath}`;
             infoContainer.createEl('img', {
                 attr: { alt: imagePath, src: imagePath },
@@ -361,7 +357,7 @@ export class TocView extends ItemView {
     }
 
     async showNewChapterModal(folder: TFolder) {
-        const modal = new NewChapterModal(this.app, folder, this, this.refresh);
+        const modal = new NewChapterModal(this.app, folder, this, '章节' ,this.refresh);
         modal.open();
     }
 

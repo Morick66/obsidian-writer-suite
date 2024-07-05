@@ -4,19 +4,23 @@ import { ItemView, TFolder, Notice, Modal, TextComponent, ButtonComponent, App} 
 export class NewChapterModal extends Modal {
     folder: TFolder;
     view: ItemView;
+    itemType: string; // 新建项目的类型，例如 "章节"、"灵感" 等
+    refreshCallback: () => void;
 
-    constructor(app: App, folder: TFolder, view: ItemView, refreshCallback: () => void) {
+    constructor(app: App, folder: TFolder, view: ItemView, itemType: string, refreshCallback: () => void) {
         super(app);
         this.folder = folder;
         this.view = view;
+        this.itemType = itemType;
+        this.refreshCallback = refreshCallback;
     }
 
     onOpen() {
         const { contentEl } = this;
-        contentEl.createEl('h2', { cls: 'pluginModal', text: '新建章节' });
+        contentEl.createEl('h2', { cls: 'pluginModal', text: `新建${this.itemType}` });
 
         const input = new TextComponent(contentEl);
-        input.setPlaceholder('章节名称');
+        input.setPlaceholder(`${this.itemType}名称`);
 
         new ButtonComponent(contentEl)
             .setButtonText('创建')
@@ -24,7 +28,7 @@ export class NewChapterModal extends Modal {
             .onClick(async () => {
                 const fileName = input.getValue();
                 if (!fileName) {
-                    new Notice('章节名称不能为空');
+                    new Notice(`${this.itemType}名称不能为空`);
                     return;
                 }
 

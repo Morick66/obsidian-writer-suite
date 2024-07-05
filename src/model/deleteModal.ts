@@ -28,7 +28,6 @@ export class ConfirmDeleteModal extends Modal {
             .onClick(async () => {
                 await this.app.vault.trash(this.fileOrFolder, false);
                 this.close();
-                this.refreshCallback();
             });
 
         new ButtonComponent(contentEl)

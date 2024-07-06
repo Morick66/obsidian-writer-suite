@@ -1,4 +1,4 @@
-import { App, Plugin, PluginSettingTab, Setting, WorkspaceLeaf, TFile } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting, WorkspaceLeaf, TFile, Notice } from 'obsidian';
 import { TocView, VIEW_TYPE_FILE_LIST } from './view/tocView';
 import { BookshelfView, VIEW_TYPE_BOOKSHELF } from './view/bookShelfView';
 import { BookSettingView, VIEW_TYPE_BOOK_SETTING } from './view/bookSettingView';
@@ -8,6 +8,7 @@ interface MyPluginSettings {
     name: string;
     picturePath: string; // 新增图片路径设置项
     countPunctuation: boolean;
+    booksPerRow: number;
 }
 
 // 默认设置
@@ -15,6 +16,7 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
     name: '',
     picturePath: '',
     countPunctuation: false,
+    booksPerRow: 5,
 }
 
 // 插件设置面板
@@ -66,6 +68,22 @@ class MyPluginSettingTab extends PluginSettingTab {
                         view.refresh();
                     }
                 }));
+        new Setting(containerEl)
+        .setName('每行显示书籍数量')
+        .addText(text => {
+            text.setValue(this.plugin.settings.booksPerRow.toString()).onChange(async (value) => {
+                const num = parseInt(value);
+                if (!isNaN(num) && num > 0) {
+                    this.plugin.settings.booksPerRow = num;
+                    await this.plugin.saveSettings();
+                    console.log('Settings saved. Refreshing bookshelf view.');
+                    // 确保在设置保存后立即刷新书架视图
+                    this.plugin.refreshBookshelfView();
+                } else {
+                    new Notice('请输入一个有效的正整数');
+                }
+            })
+        });
     }
 }
 
@@ -156,6 +174,7 @@ export default class MyPlugin extends Plugin {
         await this.saveSettings();
         this.refreshTocView();
         this.refreshBookSettingView();
+        this.refreshBookshelfView();
     }
 
     refreshTocView() {
@@ -170,6 +189,13 @@ export default class MyPlugin extends Plugin {
         const bookSettingView = this.app.workspace.getLeavesOfType(VIEW_TYPE_BOOK_SETTING)[0]?.view as BookSettingView;
         if (bookSettingView) {
             bookSettingView.refresh();
+        }
+    }
+
+    refreshBookshelfView() {
+        const bookshelfView = this.app.workspace.getLeavesOfType(VIEW_TYPE_BOOKSHELF)[0]?.view as BookshelfView;
+        if (bookshelfView) {
+            bookshelfView.refresh();
         }
     }
 

@@ -206,14 +206,32 @@ export class BookSettingView extends ItemView {
         listHeaderIcon.addEventListener('click', async () => {
             const newCategoryName = inputCategoryName.value.trim();
             if (newCategoryName) {
-                const currentSettingFolderPath = `${this.plugin.folderPath}/设定/${this.currentTab}`;
-                await this.app.vault.createFolder(`${currentSettingFolderPath}/${newCategoryName}`);
-                new Notice(`Folder '${newCategoryName}' created.`);
+                const baseSettingFolderPath = `${this.plugin.folderPath}/设定`;
+                const currentSettingFolderPath = `${baseSettingFolderPath}/${this.currentTab}`;
+                const newCategoryPath = `${currentSettingFolderPath}/${newCategoryName}`;
+        
+                // 检查设定和大纲路径是否存在，如果不存在，递归创建
+                await createFolderIfNotExists.call(this, baseSettingFolderPath);
+                await createFolderIfNotExists.call(this, currentSettingFolderPath);
+        
+                // 创建新分类文件夹
+                await this.app.vault.createFolder(newCategoryPath);
+                new Notice(`创建分类——'${newCategoryName}'`);
                 updateAndDisplayList(this.currentTab);
             } else {
                 new Notice('请输入分类名称');
             }
         });
+        
+        // 递归创建文件夹，如果路径不存在
+        async function createFolderIfNotExists(path: string) {
+            const folder = this.app.vault.getAbstractFileByPath(path);
+            if (!(folder instanceof TFolder)) {
+                const parentPath = path.substring(0, path.lastIndexOf('/'));
+                await createFolderIfNotExists.call(this, parentPath); // 递归创建父文件夹
+                await this.app.vault.createFolder(path);
+            }
+        }
 
         updateAndDisplayList(this.currentTab);
 

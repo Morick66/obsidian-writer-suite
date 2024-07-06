@@ -4,6 +4,7 @@ import { ItemView, TFolder, Notice, ButtonComponent, TextComponent, Modal, App }
 export class NewBookModal extends Modal {
     folder: TFolder;
     view: ItemView;
+    refreshCallback: () => void;
 
     constructor(app: App, folder: TFolder, view: ItemView, refreshCallback: () => void) {
         super(app);
@@ -81,6 +82,7 @@ export class NewBookModal extends Modal {
 
                 new Notice('书籍已创建');
                 this.close();
+                
             });
 
         new ButtonComponent(contentEl)

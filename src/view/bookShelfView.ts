@@ -10,7 +10,6 @@ export const VIEW_TYPE_BOOKSHELF = 'bookshelf-view';
 export class BookshelfView extends ItemView {
     plugin: MyPlugin;
     wordCounter: WordCounter;
-    bookListContainer: HTMLElement;
 
     constructor(leaf: WorkspaceLeaf, plugin: MyPlugin) {
         super(leaf);
@@ -31,30 +30,35 @@ export class BookshelfView extends ItemView {
         const container = this.containerEl.children[1];
         container.empty();
 
+        // 创建书籍列表容器
+        const bookList = this.containerEl.createDiv({ cls: 'book-list-container' });
+        bookList.style.gridTemplateColumns = `repeat(${this.plugin.settings.booksPerRow}, 1fr)`
+        this.toggleFloatingButton();
+        await this.refresh();
+    }
+    toggleFloatingButton() {
         // 添加浮动按钮
-        const floatingButton = container.createEl('button', { cls: 'floating-button' });
+        const floatingButton = this.containerEl.createEl('button', { cls: 'floating-button' });
         setIcon(floatingButton, 'plus');
         floatingButton.title = '新建书籍';
         floatingButton.addEventListener('click', () => {
             this.showNewBookModal();
         });
-
-        // 创建书籍列表容器
-        this.bookListContainer = container.createDiv({ cls: 'book-list-container' });
-
-        await this.refresh();
     }
-
     async refresh() {
-        this.bookListContainer.empty(); // 仅清空书籍列表容器
+        this.containerEl.empty(); // 仅清空书籍列表容器
+        const bookListContainer = this.containerEl.createDiv({ cls: 'book-list-container' });
+        
+        bookListContainer.style.gridTemplateColumns = `repeat(${this.plugin.settings.booksPerRow}, 1fr)`;
 
         const rootFolder = "/";
         const folder = this.app.vault.getAbstractFileByPath(rootFolder);
         if (folder instanceof TFolder) {
-            await this.displayBooks(this.bookListContainer, folder);
+            await this.displayBooks(bookListContainer, folder);
         } else {
             new Notice('根文件夹未找到');
         }
+        this.toggleFloatingButton();
     }
 
     async displayBooks(container: HTMLElement, rootFolder: TFolder) {
@@ -159,7 +163,6 @@ export class BookshelfView extends ItemView {
             new Notice('根文件夹未找到');
         }
     }
-
     async onClose() {
         this.plugin.folderPath = '';
     }

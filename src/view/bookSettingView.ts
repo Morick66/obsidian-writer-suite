@@ -12,8 +12,8 @@ export class BookSettingView extends ItemView {
     plugin: MyPlugin;
     tabsContainer: HTMLElement;
     contentContainer: HTMLElement;
-    currentTab = '大纲'; // 存储当前选中的tab
-    setContentContainer: HTMLElement; // 声明为类属性
+    currentTab = '大纲';
+    setContentContainer: HTMLElement;
 
     constructor(leaf: WorkspaceLeaf, plugin: MyPlugin) {
         super(leaf);
@@ -36,38 +36,39 @@ export class BookSettingView extends ItemView {
     }
     
     async refresh() {
+        const previousTab = this.currentTab; // 保存当前选中的 tab
         this.containerEl.empty();
-        if (this.plugin.folderPath === '') {
+        if (!this.plugin.folderPath) {
             await this.showInspiration();
         } else {
             const infoFilePath = `${this.plugin.folderPath}/信息.md`;
             const file = this.app.vault.getAbstractFileByPath(infoFilePath);
             
             if (file instanceof TFile) {
-                const yamlHeader = this.getFileYaml(infoFilePath); // 确保这是一个解析 YAML 的函数
-    
-                // 等待 yamlHeader 完成解析后再访问其属性
-                const resolvedYamlHeader = await yamlHeader;
-                if (resolvedYamlHeader && resolvedYamlHeader.type === 'short-story') {
-                    await this.shortStoryOutline();
-                } else {
-                    this.createSetView();
-                    await this.showViewContent(this.currentTab);
+                try {
+                    const yamlHeader = await this.getFileYaml(infoFilePath);
+                    if (yamlHeader?.type === 'short-story') {
+                        await this.shortStoryOutline();
+                    } else {
+                        this.createSetView();
+                        this.currentTab = previousTab; // 恢复选中的 tab
+                        await this.showViewContent(this.currentTab);
+                    }
+                } catch (error) {
+                    new Notice('解析信息.md文件时出错');
                 }
             } else {
                 new Notice('未找到信息.md文件或文件路径不正确');
             }
         }
     }
-    
-    // 解析YAML头部的方法
+
     async getFileYaml(filePath: string) {
         const file = this.app.vault.getAbstractFileByPath(filePath);
         if (file instanceof TFile) {
             const fileContents = await this.app.vault.read(file);
             const yamlHeader = fileContents.split('---')[1]?.trim();
-            const fileYaml = yamlHeader ? parseYaml(yamlHeader) : null;
-            return fileYaml;
+            return yamlHeader ? parseYaml(yamlHeader) : null;
         } else {
             new Notice('文件未找到或文件路径不正确');
             return null;
@@ -78,7 +79,7 @@ export class BookSettingView extends ItemView {
         const outlineContent = this.containerEl.createEl('div', { cls: 'outline-container' });
         const shortStoryOutlinePath = `${this.plugin.folderPath}/大纲.md`;
         const shortStoryOutline = this.app.vault.getAbstractFileByPath(shortStoryOutlinePath);
-        // 显示大纲标题
+        
         outlineContent.createEl('h2', { text: '大纲', cls: 'view-title' });
         const modifyButton = outlineContent.createEl('div', { cls: 'modify-button' });
         setIcon(modifyButton, 'pencil');
@@ -87,16 +88,9 @@ export class BookSettingView extends ItemView {
         });
     
         if (shortStoryOutline instanceof TFile) {
-            // 读取文件内容
             const fileContent = await this.app.vault.read(shortStoryOutline);
-    
-            // 创建一个新的 div 作为内容容器，并添加到主容器中
             const shortStoryToc = outlineContent.createDiv({ cls: 'outline-content' });
-    
-            // 确保内容容器是空的
             shortStoryToc.empty();
-    
-            // 渲染 Markdown 内容
             MarkdownRenderer.render(this.app, fileContent, shortStoryToc, shortStoryOutlinePath, this);
         } else {
             new Notice('大纲文件未找到');
@@ -121,7 +115,7 @@ export class BookSettingView extends ItemView {
         if (folder instanceof TFolder) {
             for (const child of folder.children) {
                 if (child instanceof TFile) {
-                    this.displayInspirationItem(child);
+                    await this.displayInspirationItem(child);
                 }
             }
         } else {
@@ -154,8 +148,8 @@ export class BookSettingView extends ItemView {
     async showNewInspirationModal() {
         const inspirationPath = '@附件/灵感';
         const folder = this.app.vault.getAbstractFileByPath(inspirationPath);
-        if (folder && folder instanceof TFolder) {
-            const modal = new NewInspirationModal(this.app, folder, this, this.refresh);
+        if (folder instanceof TFolder) {
+            const modal = new NewInspirationModal(this.app, folder, this, this.refresh.bind(this));
             modal.open();
         } else {
             new Notice('文件夹未找到');
@@ -166,7 +160,7 @@ export class BookSettingView extends ItemView {
         this.contentContainer.empty();
         const settingFolderPath = `${this.plugin.folderPath}/设定/${tabName}`;
         const settingFolder = this.app.vault.getAbstractFileByPath(settingFolderPath);
-        if (settingFolder && settingFolder instanceof TFolder) {
+        if (settingFolder instanceof TFolder) {
             this.displayItems(this.contentContainer, settingFolder);
         } else {
             this.contentContainer.createEl('div', { text: `未找到${tabName}文件夹` });
@@ -181,7 +175,6 @@ export class BookSettingView extends ItemView {
         const listContainer = setMainContainer.createDiv({ cls: 'list-container' });
         const listHeaderContainer = listContainer.createDiv({ cls: 'list-container-header' });
 
-        // 创建一个输入框
         const categoryNameDiv = listHeaderContainer.createEl('div', { cls: 'category-input' });
         const inputCategoryName = categoryNameDiv.createEl('input', { placeholder: '分类名称' });
 
@@ -196,27 +189,25 @@ export class BookSettingView extends ItemView {
         const tabsIcon = ['list', 'user-cog', 'file-cog', 'lightbulb'];
         const tabsArray: HTMLDivElement[] = [];
 
-        // 更新settingFolderPath并显示内容的方法
-        const updateAndDisplayList = (tabName: string) => {
-            this.currentTab = tabName; // 更新当前选中的tab
+        const updateAndDisplayList = async (tabName: string) => {
+            this.currentTab = tabName;
             const currentSettingFolderPath = `${this.plugin.folderPath}/设定/${tabName}`;
             const currentSettingFolder = this.app.vault.getAbstractFileByPath(currentSettingFolderPath);
 
-            // 清空现有内容
             listContentContainer.empty();
 
-            if (currentSettingFolder && currentSettingFolder instanceof TFolder) {
+            if (currentSettingFolder instanceof TFolder) {
                 this.displayItems(listContentContainer, currentSettingFolder);
             } else {
                 listContentContainer.createEl('div', { text: `未找到${tabName}文件夹` });
             }
         };
 
-        listHeaderIcon.addEventListener('click', () => {
+        listHeaderIcon.addEventListener('click', async () => {
             const newCategoryName = inputCategoryName.value.trim();
             if (newCategoryName) {
                 const currentSettingFolderPath = `${this.plugin.folderPath}/设定/${this.currentTab}`;
-                this.app.vault.createFolder(`${currentSettingFolderPath}/${newCategoryName}`);
+                await this.app.vault.createFolder(`${currentSettingFolderPath}/${newCategoryName}`);
                 new Notice(`Folder '${newCategoryName}' created.`);
                 updateAndDisplayList(this.currentTab);
             } else {
@@ -224,27 +215,22 @@ export class BookSettingView extends ItemView {
             }
         });
 
-        // 默认加载大纲内容
         updateAndDisplayList(this.currentTab);
 
         tabs.forEach(tabName => {
             const tab = tabsTop.createEl('div', { cls: 'tab-button' });
-            tabsArray.push(tab); // 存储tab的引用
-            tab.addEventListener('click', () => {
-                updateAndDisplayList(tabName);
+            tabsArray.push(tab);
+            tab.addEventListener('click', async () => {
+                await updateAndDisplayList(tabName);
 
-                // 移除所有标签的selected类
                 tabsArray.forEach(t => t.removeClass('selected'));
-
-                // 为当前点击的标签添加selected类
                 tab.addClass('selected');
 
-                this.showViewContent(tabName);
+                await this.showViewContent(tabName);
             });
 
-            // 为“大纲”标签添加selected类
-            if (tabName === '大纲') {
-                tab.addClass('selected'); // 给“大纲”按钮添加selected类
+            if (tabName === this.currentTab) {
+                tab.addClass('selected'); // 确保当前选中的 tab 高亮显示
             }
 
             const tabIcon = tab.createDiv();
@@ -327,7 +313,6 @@ export class BookSettingView extends ItemView {
         const fileName = fileHeader.createEl('span');
         fileName.textContent = file.name.replace(/\.md$/, '');
     
-        // 添加删除按钮到文件项
         const deleteButton = fileItem.createEl('button', { cls: 'deleteButton' });
         setIcon(deleteButton, 'trash');
         deleteButton.title = "删除文件";
@@ -352,14 +337,14 @@ export class BookSettingView extends ItemView {
     }
     
     async showNewChapterModal(folder: TFolder) {
-        const modal = new NewChapterModal(this.app, folder, this, '', this.refresh);
+        const modal = new NewChapterModal(this.app, folder, this, '', this.refresh.bind(this));
         modal.open();
     }
 
     async showNewItemModal(folderPath: string) {
         const folder = this.app.vault.getAbstractFileByPath(folderPath);
-        if (folder && folder instanceof TFolder) {
-            const modal = new NewItemModal(this.app, folder, this, this.refresh);
+        if (folder instanceof TFolder) {
+            const modal = new NewItemModal(this.app, folder, this, this.refresh.bind(this));
             modal.open();
         } else {
             new Notice(`文件夹未发现: ${folderPath}`);
@@ -367,7 +352,7 @@ export class BookSettingView extends ItemView {
     }
 
     confirmDelete(fileOrFolder: TFile | TFolder) {
-        const modal = new ConfirmDeleteModal(this.app, fileOrFolder, this, this.refresh);
+        const modal = new ConfirmDeleteModal(this.app, fileOrFolder, this, this.refresh.bind(this));
         modal.open();
     }
 }

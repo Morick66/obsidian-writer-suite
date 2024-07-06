@@ -14,22 +14,8 @@
               "type": "bookshelf-view",
               "state": {}
             }
-          },
-          {
-            "id": "9b272933808fca3e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "长篇小说1/小说文稿/第1卷/第2章.md",
-                "mode": "source",
-                "backlinks": false,
-                "source": false
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -127,11 +113,11 @@
       "writer-suite:目录": false
     }
   },
-  "active": "9b272933808fca3e",
+  "active": "8646cae11cdc4d36",
   "lastOpenFiles": [
+    "长篇小说1/小说文稿/第1卷/第2章.md",
     "长篇小说1/设定/大纲/总纲/大纲.md",
     "长篇小说1/小说文稿/第2卷/第3章.md",
-    "长篇小说1/小说文稿/第1卷/第2章.md",
     "长篇小说1/设定/大纲/章纲/第二章.md",
     "长篇小说1/设定/大纲/章纲/第一章.md",
     "长篇小说1/设定/大纲/章纲",

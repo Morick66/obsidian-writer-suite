@@ -80,8 +80,8 @@ export class BookSettingView extends ItemView {
         const shortStoryOutlinePath = `${this.plugin.folderPath}/大纲.md`;
         const shortStoryOutline = this.app.vault.getAbstractFileByPath(shortStoryOutlinePath);
         
-        outlineContent.createEl('h2', { text: '大纲', cls: 'view-title' });
-        const modifyButton = outlineContent.createEl('div', { cls: 'modify-button' });
+        const setContentContainerTitle = outlineContent.createEl('h2', { text: '大纲', cls: 'set-content-title' });
+        const modifyButton = setContentContainerTitle.createEl('div', { cls: 'modify-button' });
         setIcon(modifyButton, 'pencil');
         modifyButton.addEventListener('click', () => {
             this.app.workspace.openLinkText(shortStoryOutlinePath, '', false);
@@ -343,8 +343,11 @@ export class BookSettingView extends ItemView {
             const fileContent = await this.app.vault.read(file);
             const setContentContainer = this.containerEl.querySelector('.item-container') as HTMLElement;
             setContentContainer.empty();
-            MarkdownRenderer.render(this.app, fileContent, setContentContainer, file.path, this);
-            const modifyButton = this.setContentContainer.createEl('div', { cls: 'modify-button' });
+            const setContentContainerTitle = setContentContainer.createEl('h2', { cls: 'set-content-title', text: file.name.replace(/\.md$/, '') });
+            const setContentContainerMain = setContentContainer.createEl('div', { cls: 'set-content-container-main' });
+            
+            MarkdownRenderer.render(this.app, fileContent, setContentContainerMain, file.path, this);
+            const modifyButton = setContentContainerTitle.createEl('div', { cls: 'modify-button' });
             setIcon(modifyButton, 'pencil');
             modifyButton.addEventListener('click', () => {
                 this.app.workspace.openLinkText(file.path, '', false);

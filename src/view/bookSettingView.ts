@@ -151,7 +151,18 @@ export class BookSettingView extends ItemView {
 
     async showNewInspirationModal() {
         const inspirationPath = '@附件/灵感';
-        const folder = this.app.vault.getAbstractFileByPath(inspirationPath);
+        let folder = this.app.vault.getAbstractFileByPath(inspirationPath);
+    
+        if (!(folder instanceof TFolder)) {
+            try {
+                await this.app.vault.createFolder(inspirationPath);
+                folder = this.app.vault.getAbstractFileByPath(inspirationPath);
+            } catch (error) {
+                new Notice('创建灵感文件夹时出错');
+                return;
+            }
+        }
+    
         if (folder instanceof TFolder) {
             const modal = new NewInspirationModal(this.app, folder, this, this.refresh.bind(this));
             modal.open();
@@ -159,6 +170,7 @@ export class BookSettingView extends ItemView {
             new Notice('文件夹未找到');
         }
     }
+    
 
     async showViewContent(tabName: string) {
         this.contentContainer.empty();

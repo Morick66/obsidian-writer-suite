@@ -45,8 +45,6 @@ export class TocView extends ItemView {
             this.showNewItemModal();
         });
 
-        // 根据 folderPath 初始化浮动按钮的显示状态
-        this.toggleFloatingButton();
         this.refresh();
     }
 
@@ -64,7 +62,6 @@ export class TocView extends ItemView {
         if (title) {
             title.textContent = this.plugin.folderPath;
         }
-        this.toggleFloatingButton();
     }
 
     async refresh() {
@@ -83,13 +80,13 @@ export class TocView extends ItemView {
         if (novelFolder && novelFolder instanceof TFolder) {
             // 处理长篇小说的目录结构
             this.displayItems(container, novelFolder);
+            this.toggleFloatingButton();
         } else if (shortStoryFile && shortStoryFile instanceof TFile) {
             // 如果是短篇小说，展示大纲
             this.displayOutline(container, shortStoryFile);
         } else {
             this.displayInfo(container);
         }
-        this.toggleFloatingButton();
     }
     displayInfo(container: HTMLElement) {
         const { settings } = this.plugin;

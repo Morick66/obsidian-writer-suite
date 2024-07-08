@@ -35,8 +35,6 @@ export class NewInspirationModal extends Modal {
                 }
                 
                 const filePath = `${this.folder.path}/${fileName}.md`;
-                console.log(this.folder);
-                console.log(filePath);
                 await this.app.vault.create(filePath, fileContent);
                 this.close();
             });

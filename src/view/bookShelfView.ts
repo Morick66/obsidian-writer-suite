@@ -81,7 +81,7 @@ export class BookshelfView extends ItemView {
                             const totalWordCount = await this.wordCounter.getWordCount(storyFile);
                             this.displayBook(container, folder, fileYaml.type, totalWordCount);
                         } else {
-                            console.log(`小说文件夹未发现 ${folder.name}`);
+                            new Notice(`小说文件夹未发现 ${folder.name}`);
                         }
                     }
                 } catch (error) {

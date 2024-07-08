@@ -123,7 +123,7 @@ export class BookSettingView extends ItemView {
                 }
             }
         } else {
-            this.contentContainer.createEl('div', { text: '未找到灵感文件夹。' });
+            this.contentContainer.createEl('div', { cls:'hint-info', text: '未找到灵感文件夹。' });
         }
     }
 
@@ -167,7 +167,7 @@ export class BookSettingView extends ItemView {
         if (settingFolder instanceof TFolder) {
             this.displayItems(this.contentContainer, settingFolder);
         } else {
-            this.contentContainer.createEl('div', { text: `未找到${tabName}文件夹` });
+            this.contentContainer.createEl('div', { cls:'hint-info', text: `未找到${tabName}文件夹` });
         }
     }
 
@@ -203,7 +203,7 @@ export class BookSettingView extends ItemView {
             if (currentSettingFolder instanceof TFolder) {
                 this.displayItems(listContentContainer, currentSettingFolder);
             } else {
-                listContentContainer.createEl('div', { text: `未找到${tabName}文件夹` });
+                listContentContainer.createEl('div', { cls:'hint-info', text: `未找到${tabName}文件夹` });
             }
         };
 

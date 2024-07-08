@@ -76,7 +76,6 @@ class MyPluginSettingTab extends PluginSettingTab {
                 if (!isNaN(num) && num > 0) {
                     this.plugin.settings.booksPerRow = num;
                     await this.plugin.saveSettings();
-                    console.log('Settings saved. Refreshing bookshelf view.');
                     // 确保在设置保存后立即刷新书架视图
                     this.plugin.refreshBookshelfView();
                 } else {

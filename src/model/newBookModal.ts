@@ -38,13 +38,6 @@ export class NewBookModal extends Modal {
         const shortStoryOption = selectEl.createEl('option', { attr: { value: 'short-story' } });
         shortStoryOption.textContent = '短篇小说';
 
-        // 为 select 元素设置一个 change 事件监听器，以便在用户选择不同的类型时更新状态
-        selectEl.addEventListener('change', (event) => {
-            const target = event.target as HTMLSelectElement; 
-            const selectedValue = target.value;
-            console.log('用户选择了书籍类型：', selectedValue);
-        });
-
         const desclabelEl = infoForm.createEl('div', { cls: 'desc-label' });
         desclabelEl.createEl('div', { text: '书籍简介', cls: 'input-label' });
         const descInputEl = desclabelEl.createEl('textarea', { cls: 'book-description-textarea' });

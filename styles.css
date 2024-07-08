@@ -358,3 +358,7 @@ div[data-type="file-list-view"] .outline-title:hover {
     border-radius: 50%;
     width: 50%;
 }
+
+.hint-info {
+    text-align: center;
+}

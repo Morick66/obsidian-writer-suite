@@ -124,7 +124,6 @@ export default class MyPlugin extends Plugin {
 
         this.addSettingTab(new MyPluginSettingTab(this.app, this));
 
-        this.registerEvent(this.app.vault.on('modify', this.handleFileChange.bind(this)));
         this.registerEvent(this.app.vault.on('create', this.handleFileChange.bind(this)));
         this.registerEvent(this.app.vault.on('delete', this.handleFileChange.bind(this)));
 

@@ -1,4 +1,3 @@
-// book-setting-view.ts
 import { ItemView, WorkspaceLeaf, TFolder, TFile, setIcon, Notice, MarkdownRenderer, parseYaml } from 'obsidian';
 import MyPlugin from '../main';
 import { ConfirmDeleteModal } from '../model/deleteModal';
@@ -14,6 +13,7 @@ export class BookSettingView extends ItemView {
     contentContainer: HTMLElement;
     currentTab = '大纲';
     setContentContainer: HTMLElement;
+    currentDisplayedFile: TFile | null = null;
 
     constructor(leaf: WorkspaceLeaf, plugin: MyPlugin) {
         super(leaf);
@@ -34,16 +34,17 @@ export class BookSettingView extends ItemView {
         this.contentContainer = this.containerEl.createDiv({ cls: 'setting-content' });
         await this.refresh();
     }
-    
+
     async refresh() {
-        const previousTab = this.currentTab; // 保存当前选中的 tab
+        const previousTab = this.currentTab;
         this.containerEl.empty();
+
         if (!this.plugin.folderPath) {
             await this.showInspiration();
         } else {
             const infoFilePath = `${this.plugin.folderPath}/信息.md`;
             const file = this.app.vault.getAbstractFileByPath(infoFilePath);
-            
+
             if (file instanceof TFile) {
                 try {
                     const yamlHeader = await this.getFileYaml(infoFilePath);
@@ -51,8 +52,11 @@ export class BookSettingView extends ItemView {
                         await this.shortStoryOutline();
                     } else {
                         this.createSetView();
-                        this.currentTab = previousTab; // 恢复选中的 tab
+                        this.currentTab = previousTab;
                         await this.showViewContent(this.currentTab);
+                        if (this.currentDisplayedFile) {
+                            await this.renderFileContent(this.currentDisplayedFile);
+                        }
                     }
                 } catch (error) {
                     new Notice('解析信息.md文件时出错');
@@ -79,14 +83,14 @@ export class BookSettingView extends ItemView {
         const outlineContent = this.containerEl.createEl('div', { cls: 'outline-container' });
         const shortStoryOutlinePath = `${this.plugin.folderPath}/大纲.md`;
         const shortStoryOutline = this.app.vault.getAbstractFileByPath(shortStoryOutlinePath);
-        
+
         const setContentContainerTitle = outlineContent.createEl('h2', { text: '大纲', cls: 'set-content-title' });
         const modifyButton = setContentContainerTitle.createEl('div', { cls: 'modify-button' });
         setIcon(modifyButton, 'pencil');
         modifyButton.addEventListener('click', () => {
             this.app.workspace.openLinkText(shortStoryOutlinePath, '', false);
         });
-    
+
         if (shortStoryOutline instanceof TFile) {
             const fileContent = await this.app.vault.read(shortStoryOutline);
             const shortStoryToc = outlineContent.createDiv({ cls: 'outline-content' });
@@ -100,7 +104,7 @@ export class BookSettingView extends ItemView {
     async showInspiration() {
         const inspirationPath = '@附件/灵感';
         const folder = this.app.vault.getAbstractFileByPath(inspirationPath);
-        
+
         const inspirationTitle = this.containerEl.createEl('h2', { cls: 'view-title' });
         inspirationTitle.createEl('span', { text: '灵感' });
 
@@ -209,12 +213,10 @@ export class BookSettingView extends ItemView {
                 const baseSettingFolderPath = `${this.plugin.folderPath}/设定`;
                 const currentSettingFolderPath = `${baseSettingFolderPath}/${this.currentTab}`;
                 const newCategoryPath = `${currentSettingFolderPath}/${newCategoryName}`;
-        
-                // 检查设定和大纲路径是否存在，如果不存在，递归创建
+
                 await createFolderIfNotExists.call(this, baseSettingFolderPath);
                 await createFolderIfNotExists.call(this, currentSettingFolderPath);
-        
-                // 创建新分类文件夹
+
                 await this.app.vault.createFolder(newCategoryPath);
                 new Notice(`创建分类——'${newCategoryName}'`);
                 updateAndDisplayList(this.currentTab);
@@ -222,13 +224,12 @@ export class BookSettingView extends ItemView {
                 new Notice('请输入分类名称');
             }
         });
-        
-        // 递归创建文件夹，如果路径不存在
+
         async function createFolderIfNotExists(path: string) {
             const folder = this.app.vault.getAbstractFileByPath(path);
             if (!(folder instanceof TFolder)) {
                 const parentPath = path.substring(0, path.lastIndexOf('/'));
-                await createFolderIfNotExists.call(this, parentPath); // 递归创建父文件夹
+                await createFolderIfNotExists.call(this, parentPath);
                 await this.app.vault.createFolder(path);
             }
         }
@@ -248,7 +249,7 @@ export class BookSettingView extends ItemView {
             });
 
             if (tabName === this.currentTab) {
-                tab.addClass('selected'); // 确保当前选中的 tab 高亮显示
+                tab.addClass('selected');
             }
 
             const tabIcon = tab.createDiv();
@@ -276,7 +277,7 @@ export class BookSettingView extends ItemView {
         const folderIcon = folderName.createEl('span');
         setIcon(folderIcon, 'folder-open');
         folderName.createSpan({ text: folder.name });
-        
+
         const tocButton = folderHeader.createEl('div', { cls: 'tocButton' });
 
         const addButton = tocButton.createEl('button');
@@ -324,13 +325,13 @@ export class BookSettingView extends ItemView {
     }
 
     async displayFile(container: HTMLElement, file: TFile) {
-        const fileItem = container.createEl('li', {cls: "chapter-title" });
+        const fileItem = container.createEl('li', { cls: "chapter-title" });
         const fileHeader = fileItem.createEl('div', { cls: 'file-header' });
         const fileIcon = fileHeader.createEl('span');
         setIcon(fileIcon, 'file-text');
         const fileName = fileHeader.createEl('span');
         fileName.textContent = file.name.replace(/\.md$/, '');
-    
+
         const deleteButton = fileItem.createEl('button', { cls: 'deleteButton' });
         setIcon(deleteButton, 'trash');
         deleteButton.title = "删除文件";
@@ -340,23 +341,29 @@ export class BookSettingView extends ItemView {
         });
 
         fileName.addEventListener('click', async () => {
-            const fileContent = await this.app.vault.read(file);
-            const setContentContainer = this.containerEl.querySelector('.item-container') as HTMLElement;
-            setContentContainer.empty();
-            const setContentContainerTitle = setContentContainer.createEl('h2', { cls: 'set-content-title', text: file.name.replace(/\.md$/, '') });
-            const setContentContainerMain = setContentContainer.createEl('div', { cls: 'set-content-container-main' });
-            
-            MarkdownRenderer.render(this.app, fileContent, setContentContainerMain, file.path, this);
-            const modifyButton = setContentContainerTitle.createEl('div', { cls: 'modify-button' });
-            setIcon(modifyButton, 'pencil');
-            modifyButton.addEventListener('click', () => {
-                this.app.workspace.openLinkText(file.path, '', false);
-            });
+            this.currentDisplayedFile = file;
+            await this.renderFileContent(file);
         });
 
         fileItem.dataset.path = file.path;
     }
-    
+
+    async renderFileContent(file: TFile) {
+        const fileContent = await this.app.vault.read(file);
+        const setContentContainer = this.setContentContainer;
+        setContentContainer.empty();
+        const setContentContainerTitle = setContentContainer.createEl('h2', { cls: 'set-content-title', text: `${this.currentTab}——${file.name.replace(/\.md$/, '')}` });
+
+        const setContentContainerMain = setContentContainer.createEl('div', { cls: 'set-content-container-main' });
+        MarkdownRenderer.render(this.app, fileContent, setContentContainerMain, file.path, this);
+
+        const modifyButton = setContentContainerTitle.createEl('div', { cls: 'modify-button' });
+        setIcon(modifyButton, 'pencil');
+        modifyButton.addEventListener('click', () => {
+            this.app.workspace.openLinkText(file.path, '', false);
+        });
+    }
+
     async showNewChapterModal(folder: TFolder) {
         const modal = new NewChapterModal(this.app, folder, this, '', this.refresh.bind(this));
         modal.open();

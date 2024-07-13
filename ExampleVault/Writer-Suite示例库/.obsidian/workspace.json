@@ -14,8 +14,22 @@
               "type": "bookshelf-view",
               "state": {}
             }
+          },
+          {
+            "id": "69bbc899b8b76767",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "短篇小说2/小说正文.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -112,12 +126,13 @@
       "writer-suite:目录": false
     }
   },
-  "active": "8646cae11cdc4d36",
+  "active": "69bbc899b8b76767",
   "lastOpenFiles": [
+    "短篇小说1/小说正文.md",
+    "短篇小说1/大纲.md",
     "长篇小说1/小说文稿/第1卷/第2章.md",
     "长篇小说2/小说文稿/未命名章节.md",
     "短篇小说2/小说正文.md",
-    "短篇小说1/小说正文.md",
     "111/小说文稿/未命名章节.md",
     "222/小说文稿/未命名章节.md",
     "222/小说文稿",
@@ -149,7 +164,6 @@
     "@附件/灵感/全局灵感1.md",
     "欢迎.md",
     "短篇小说测试/小说正文.md",
-    "长篇小说测试/小说文稿/未命名章节.md",
     "@附件/图片/Morick.jpg",
     "叠龟宇宙/cover.jpg",
     "未命名.canvas",

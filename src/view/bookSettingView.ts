@@ -215,7 +215,7 @@ export class BookSettingView extends ItemView {
             if (currentSettingFolder instanceof TFolder) {
                 this.displayItems(listContentContainer, currentSettingFolder);
             } else {
-                listContentContainer.createEl('div', { cls:'hint-info', text: `未找到${tabName}文件夹` });
+                listContentContainer.createEl('div', { cls:'hint-info', text: `${tabName}下无文件` });
             }
         };
 
@@ -230,7 +230,6 @@ export class BookSettingView extends ItemView {
                 await createFolderIfNotExists.call(this, currentSettingFolderPath);
 
                 await this.app.vault.createFolder(newCategoryPath);
-                new Notice(`创建分类——'${newCategoryName}'`);
                 updateAndDisplayList(this.currentTab);
             } else {
                 new Notice('请输入分类名称');

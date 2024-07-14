@@ -1,11 +1,10 @@
 {
 	"id": "writer-suite",
 	"name": "Writer Suite",
-	"version": "0.2.1",
-	"minAppVersion": "0.2.1",
+	"version": "0.2.2",
+	"minAppVersion": "0.13.21",
 	"description": "An obsidian plug-in that is more convenient for writing novels",
 	"author": "Morick",
-	"authorUrl": "",
-	"fundingUrl": "",
+	"authorUrl": "https://github.com/Morick66",
 	"isDesktopOnly": true
 }

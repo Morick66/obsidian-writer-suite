@@ -22,13 +22,24 @@ jobs:
           npm install
           npm run build
 
+      - name: Copy files to plugin directory
+        run: |
+          cp ./main.js ./WriterSuite-ExampleVault/.obsidian/plugins/obsidian-writer-suite/main.js
+          cp ./manifest.json ./WriterSuite-ExampleVault/.obsidian/plugins/obsidian-writer-suite/manifest.json
+          cp ./styles.css ./WriterSuite-ExampleVault/.obsidian/plugins/obsidian-writer-suite/styles.css
+
+      - name: Create zip package
+        run: |
+          zip -r WriterSuite-ExampleVault.zip WriterSuite-ExampleVault
+
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="${GITHUB_REF#refs/tags/}"
+          tag="${ GITHUB_REF#refs/tags/ }"
 
           gh release create "$tag" \
             --title="$tag" \
             --draft \
-            ./main.js ./manifest.json ./styles.css
+            ./main.js ./manifest.json ./styles.css \
+            WriterSuite-ExampleVault.zip

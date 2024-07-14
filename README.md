@@ -86,6 +86,4 @@ obsidian小说创作插件
 
 ## 使用
 
-直接下载[Writer-Suite示例库](https://github.com/Morick66/obsidian-writer-suite/tree/main/ExampleVault)
-
-或者从`Releases`下载添加到obsidian的插件文件夹中即可。
+从`Releases`下载示例库压缩包，或者下载插件文件添加到自己的插件文件夹中。

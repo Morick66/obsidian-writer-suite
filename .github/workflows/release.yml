@@ -15,7 +15,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20.12.2"
+          node-version: "18.x"
 
       - name: Build plugin
         run: |
@@ -36,10 +36,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          tag="${ GITHUB_REF#refs/tags/ }"
+          tag="${GITHUB_REF#refs/tags/}"
 
           gh release create "$tag" \
             --title="$tag" \
             --draft \
-            ./main.js ./manifest.json ./styles.css \
-            WriterSuite-ExampleVault.zip
+            ./main.js ./manifest.json ./styles.css WriterSuite-ExampleVault.zip

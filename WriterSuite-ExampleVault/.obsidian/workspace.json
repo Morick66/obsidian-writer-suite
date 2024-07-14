@@ -14,22 +14,8 @@
               "type": "bookshelf-view",
               "state": {}
             }
-          },
-          {
-            "id": "f13272b17089250a",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "短篇小说3/小说正文.md",
-                "mode": "source",
-                "backlinks": false,
-                "source": false
-              }
-            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -120,16 +106,13 @@
       "switcher:打开快速切换": false,
       "workspaces:管理工作区布局": true,
       "command-palette:打开命令面板": false,
-      "graph:查看关系图谱": false,
-      "writer-suite:设定": false,
-      "writer-suite:书架": false,
-      "writer-suite:目录": false
+      "graph:查看关系图谱": false
     }
   },
-  "active": "f13272b17089250a",
+  "active": "8646cae11cdc4d36",
   "lastOpenFiles": [
-    "长篇小说1/小说文稿/第1卷/第2章.md",
     "短篇小说3/小说正文.md",
+    "长篇小说1/小说文稿/第1卷/第2章.md",
     "短篇小说2/小说正文.md",
     "短篇小说1/小说正文.md",
     "短篇小说1/大纲.md",

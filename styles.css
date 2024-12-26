@@ -73,6 +73,22 @@ If your plugin does not need CSS, delete this file.
     display: flex;
     align-items: center;
 }
+/* 第二个条目 */
+.folder-name span:nth-child(2) {
+    width: 100px;
+    display: flex;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
+.tocButton {
+    display: flex;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
 .deleteButton,
 .tocButton>button {
     border: none;
@@ -247,6 +263,9 @@ div[data-type="book-setting"]>.view-title svg {
 .list-container {
     width: 200px;
     border-left: var(--divider-width) solid var(--divider-color);
+}
+.list-container-main {
+    overflow-y: auto;
 }
 .list-container-header {
     height: 30px;

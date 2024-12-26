@@ -48,6 +48,14 @@ If your plugin does not need CSS, delete this file.
     border-color: var(--interactive-accent);
 }
 
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
 .chapter-title>.deleteButton {
     display: none;
 }
@@ -67,6 +75,10 @@ If your plugin does not need CSS, delete this file.
     display: flex;
     align-items: center;
     gap: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
 }
 .folder-name svg,
 .file-header svg {
@@ -247,6 +259,9 @@ div[data-type="book-setting"]>.view-title svg {
 .list-container {
     width: 200px;
     border-left: var(--divider-width) solid var(--divider-color);
+}
+.list-container-main {
+    overflow-y: auto;
 }
 .list-container-header {
     height: 30px;
